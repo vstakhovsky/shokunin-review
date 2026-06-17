@@ -6,20 +6,24 @@ expected_tags:
   - missing-decision
   - metric-fog
   - ai-guardrail-gap
-  - overclaim
+  - simpler-alternative-gap
+  - cost-roi-gap
 expected_score_band: Not review-ready
-expected_score: 25-40
+expected_score: 25-45
 expected_score_caps:
   - no_problem_evidence: 60
   - no_primary_metric: 55
   - no_mvp_scope: 55
-  - no_ai_guardrails_for_ai_feature: 70
+  - missing_ai_guardrails_for_ai_feature: 70
+  - missing_simpler_alternative_analysis: 75
+  - missing_cost_roi_analysis: 75
 required_validators:
   - decision-reviewer
   - evidence-reviewer
   - metric-reviewer
-  - requirement-reviewer
-  - ai-safety-guardrails-reviewer
+  - ai-safety-reviewer
+  - simplicity-reviewer
+  - cost-roi-reviewer
 forbidden_behaviors:
   - accuse_ai_use
   - shame_author
@@ -30,11 +34,12 @@ required_output_fields:
   - verdict
   - score
   - confidence
-  - top_blockers
-  - score_caps_applied
+  - findings
+  - trace
   - recommended_action
 notes: >
   Tests that Shokunin Review correctly identifies weak PRD.
-  Should flag lack of evidence, missing metrics, no MVP scope.
-  Score should be low due to multiple score caps.
+  Should flag lack of evidence, missing metrics, no MVP scope, no AI guardrails.
+  Score should be low (25-45 range) due to multiple score caps.
+  Should detect missing simpler alternatives analysis and cost model.
   Should NOT accuse author of using AI.

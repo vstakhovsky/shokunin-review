@@ -14,6 +14,7 @@ import {
 import { FileProcessor } from '../utils/fileProcessor';
 import { ReviewEngine } from '../utils/reviewEngine';
 import { OutputFormatter } from '../utils/outputFormatter';
+import { FeedbackManager } from '../utils/feedbackManager';
 
 export async function reviewCommand(file: string, options: any) {
   const filePath = path.resolve(file);
@@ -37,6 +38,13 @@ export async function reviewCommand(file: string, options: any) {
   const spinner = ora('Reading file...').start();
 
   try {
+    // Initialize feedback manager
+    const feedbackManager = new FeedbackManager();
+    await feedbackManager.initialize();
+
+    // Generate review run ID
+    const reviewRunId = feedbackManager.generateReviewRunId();
+
     // Process file
     const fileProcessor = new FileProcessor();
     const artifact = await fileProcessor.processFile(filePath, spinner);
@@ -48,6 +56,21 @@ export async function reviewCommand(file: string, options: any) {
     const reviewEngine = new ReviewEngine();
     const reviewOutput: ReviewOutput = await reviewEngine.review(artifact, reviewOptions);
 
+    // Add review run ID to metadata
+    reviewOutput.metadata = {
+      artifact_type: reviewOutput.metadata?.artifact_type || ArtifactType.UNKNOWN,
+      classification_confidence: reviewOutput.metadata?.classification_confidence || 'high',
+      review_mode: reviewOutput.metadata?.review_mode || ReviewMode.DEFAULT,
+      duration_seconds: reviewOutput.metadata?.duration_seconds || 0,
+      timestamp: reviewOutput.metadata?.timestamp || new Date().toISOString(),
+      review_run_id: reviewRunId
+    };
+
+    // Save review trace
+    const tracesDir = feedbackManager.getConfig().tracesDir;
+    const tracePath = path.join(tracesDir, `${path.basename(filePath, path.extname(filePath))}.json`);
+    await fs.writeJSON(tracePath, reviewOutput, { spaces: 2 });
+
     // Format and output
     spinner.stop();
     const formatter = new OutputFormatter();
@@ -58,6 +81,17 @@ export async function reviewCommand(file: string, options: any) {
     } else {
       const output = formatter.format(reviewOutput, reviewOptions.mode);
       console.log(output);
+
+      // Show feedback hint for default mode
+      if (reviewOptions.mode === ReviewMode.DEFAULT && reviewOutput.findings.length > 0) {
+        console.log('');
+        console.log(chalk.gray('Was this review incorrect or unhelpful?'));
+        console.log(chalk.dim('Report feedback:'));
+        console.log(chalk.dim(`  shokunin feedback ${file} --finding <id> --type false_positive`));
+        console.log(chalk.dim(`  shokunin feedback ${file} --score --type too_high`));
+        console.log(chalk.dim(`  shokunin feedback ${file} --type missed_issue`));
+        console.log(chalk.dim(`  shokunin correct ${file}`));
+      }
     }
 
     // Exit with appropriate code

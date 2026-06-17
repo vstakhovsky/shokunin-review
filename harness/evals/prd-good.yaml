@@ -1,0 +1,25 @@
+id: prd-good
+artifact_type: PRD
+input_file: examples/prd/good-prd.md
+expected_tags: []
+expected_score_band: Ready with minor fixes
+expected_score: 70-85
+expected_score_caps: []
+required_validators: []
+forbidden_behaviors:
+  - accuse_ai_use
+  - shame_author
+  - generic_praise
+  - omit_readiness_score
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+  - findings
+  - trace
+notes: >
+  Tests that Shokunin Review correctly identifies good PRD.
+  Should score 70-85 range (review-ready with minor fixes).
+  Should have minimal findings.
+  No score caps should apply.
+  No blockers or major issues expected.

@@ -16,8 +16,27 @@ export class EvalRunner {
   private goldenDir: string;
 
   constructor() {
-    this.evalsDir = path.join(process.cwd(), 'harness', 'evals');
-    this.goldenDir = path.join(process.cwd(), 'harness', 'golden');
+    // Determine harness directory location
+    let basePath: string;
+
+    const currentHarness = path.join(process.cwd(), 'harness', 'evals');
+    const parentHarness = path.join(process.cwd(), '..', 'harness', 'evals');
+
+    if (fs.existsSync(currentHarness)) {
+      basePath = process.cwd();
+    } else if (fs.existsSync(parentHarness)) {
+      basePath = path.resolve(process.cwd(), '..');
+    } else {
+      throw new Error(
+        `Harness directory not found. Looked for:\n` +
+        `  - ${currentHarness}\n` +
+        `  - ${parentHarness}\n\n` +
+        `Please run from the repository root or CLI directory.`
+      );
+    }
+
+    this.evalsDir = path.join(basePath, 'harness', 'evals');
+    this.goldenDir = path.join(basePath, 'harness', 'golden');
   }
 
   /**
@@ -62,7 +81,7 @@ export class EvalRunner {
   /**
    * Run a single eval
    */
-  private async runSingleEval(config: EvalConfig, options: EvalOptions): Promise<EvalResult> {
+  private async runSingleEval(config: EvalConfig, _options: EvalOptions): Promise<EvalResult> {
     const startTime = Date.now();
 
     try {
@@ -138,7 +157,7 @@ export class EvalRunner {
   /**
    * Check if score matches expected band
    */
-  private checkBandMatch(actualScore: number, expectedScoreStr: string): boolean {
+  private checkBandMatch(actualScore: number, expectedScoreStr?: string): boolean {
     if (!expectedScoreStr) return true;
 
     // Parse expected score range (e.g., "25-40")

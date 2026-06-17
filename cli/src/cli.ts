@@ -7,6 +7,7 @@ import { improveCommand } from './commands/improve';
 import { rerunCommand } from './commands/rerun';
 import { scoreCommand } from './commands/score';
 import { evalCommand } from './commands/eval';
+import { feedbackCommand, correctCommand, feedbackSummaryCommand } from './commands/feedback';
 
 const program = new Command();
 
@@ -64,6 +65,27 @@ program
   .option('--verbose', 'show detailed eval output')
   .option('--golden', 'update golden outputs')
   .action(evalCommand);
+
+// Feedback command
+program
+  .command('feedback <file>')
+  .description('Report incorrect or unhelpful review results')
+  .option('-f, --finding <id>', 'report issue with specific finding')
+  .option('-s, --score', 'report issue with score')
+  .option('-t, --type <type>', 'feedback type (false_positive|missed_issue|score_too_high|score_too_low|not_useful)')
+  .action(feedbackCommand);
+
+// Correct command
+program
+  .command('correct <file>')
+  .description('Enter interactive correction mode')
+  .action(correctCommand);
+
+// Feedback summary command
+program
+  .command('feedback-summary')
+  .description('Show feedback statistics and recommendations')
+  .action(feedbackSummaryCommand);
 
 // Parse and execute
 program.parse(process.argv);

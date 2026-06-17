@@ -1,0 +1,25 @@
+id: prd-strong
+artifact_type: PRD
+input_file: examples/prd/strong-prd.md
+expected_tags: []
+expected_score_band: Review-ready
+expected_score: 85-95
+expected_score_caps: []
+required_validators: []
+forbidden_behaviors:
+  - accuse_ai_use
+  - shame_author
+  - generic_praise
+  - omit_readiness_score
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+  - findings
+  - trace
+notes: >
+  Tests that Shokunin Review correctly identifies strong PRD.
+  Should score 85-95 range (review-ready).
+  Should have zero or minimal findings.
+  No score caps should apply.
+  Comprehensive coverage of all decision-readiness elements.

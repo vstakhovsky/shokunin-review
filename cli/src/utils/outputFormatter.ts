@@ -1,7 +1,6 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
 import chalk from 'chalk';
-import { ReviewOutput, ReviewMode, ScoreBand } from '../types';
+import { ReviewOutput, ReviewMode } from '../types';
 
 export class OutputFormatter {
   /**
@@ -33,16 +32,51 @@ export class OutputFormatter {
   }
 
   /**
-   * Format default output (short, terminal-friendly)
+   * Format default output (short, terminal-friendly with scoring trace)
    */
   private formatDefault(review: ReviewOutput): string {
     const lines: string[] = [];
 
     // Verdict line
     lines.push(`${review.verdict.emoji} ${review.verdict.text} — ${review.score.total}/100`);
+    lines.push(chalk.gray(`Confidence: ${review.score.confidence}`));
+
+    // Why section
+    if (review.findings.length > 0) {
+      lines.push('');
+      lines.push(chalk.bold('Why:'));
+      const topIssues = review.findings.slice(0, 3);
+      topIssues.forEach((finding, i) => {
+        lines.push(`${i + 1}. ${finding.issue}`);
+      });
+    }
+
+    // Scoring trace
+    if (review.trace) {
+      lines.push('');
+      lines.push(chalk.bold('Scoring trace:'));
+      lines.push(`- Weighted base score: ${review.trace.weighted_base_score}`);
+      lines.push(`- Blocker penalties: ${review.trace.blocker_penalties}`);
+      lines.push(`- Major penalties: ${review.trace.major_penalties}`);
+      lines.push(`- Minor penalties: ${review.trace.minor_penalties}`);
+      if (review.trace.bloat_penalty !== 0) {
+        lines.push(`- Bloat penalty: ${review.trace.bloat_penalty}`);
+      }
+      lines.push(`- Subtotal before caps: ${review.trace.subtotal_before_caps}`);
+
+      if (review.trace.score_caps && review.trace.score_caps.length > 0) {
+        lines.push(`- Score caps applied:`);
+        review.trace.score_caps.forEach((cap: {cap: string; max_score: number}) => {
+          lines.push(`  - ${cap.cap}: max ${cap.max_score}`);
+        });
+      }
+
+      lines.push(`- Confidence adjustment: ${review.trace.confidence_adjustment}`);
+      lines.push(`- Final score: ${review.trace.final_score}`);
+    }
 
     // Top blockers only
-    const blockers = review.findings.filter(f => f.severity === 'blocker').slice(0, 3);
+    const blockers = review.findings.filter(f => f.severity === 'blocker').slice(0, 5);
     if (blockers.length > 0) {
       lines.push('');
       lines.push(chalk.bold('Top Blockers:'));
@@ -54,11 +88,11 @@ export class OutputFormatter {
       });
     }
 
-    // Score caps
-    if (review.score.score_caps_applied && review.score.score_caps_applied.length > 0) {
+    // Score caps summary
+    if (review.trace && review.trace.score_caps && review.trace.score_caps.length > 0) {
       lines.push('');
       lines.push(chalk.bold('Score Caps Applied:'));
-      review.score.score_caps_applied.forEach(cap => {
+      review.trace.score_caps.forEach((cap: {cap: string; max_score: number}) => {
         lines.push(chalk.gray(`- ${cap.cap}: max ${cap.max_score}`));
       });
     }

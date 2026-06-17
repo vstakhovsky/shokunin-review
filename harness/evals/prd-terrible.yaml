@@ -1,0 +1,39 @@
+id: prd-terrible
+artifact_type: PRD
+input_file: examples/prd/terrible-prd.md
+expected_tags:
+  - evidence-gap
+  - missing-decision
+  - metric-fog
+  - mvp-fog
+  - document-bloat
+  - overclaim
+expected_score_band: Not review-ready
+expected_score: 20-35
+expected_score_caps:
+  - no_problem_evidence: 60
+  - no_primary_metric: 55
+  - no_mvp_scope: 55
+  - critical_placeholders_present: 68
+required_validators:
+  - evidence-reviewer
+  - metric-reviewer
+  - mvp-reviewer
+  - bloat-reviewer
+  - overclaim-reviewer
+forbidden_behaviors:
+  - accuse_ai_use
+  - shame_author
+  - generic_praise
+  - omit_readiness_score
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+  - findings
+  - trace
+notes: >
+  Tests that Shokunin Review correctly identifies terrible PRD.
+  Should flag lack of evidence, missing metrics, no MVP scope, excessive bloat.
+  Score should be very low (20-35 range) due to many issues and bloat penalty.
+  Document is intentionally long and repetitive to test anti-bloat detection.

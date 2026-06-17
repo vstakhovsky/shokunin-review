@@ -1,0 +1,34 @@
+id: prd-improved
+artifact_type: PRD
+input_file: examples/prd/improved-prd.md
+expected_tags:
+  - missing-decision
+  - ai-guardrail-gap
+  - privacy-gap
+expected_score_band: Needs major fixes
+expected_score: 55-70
+expected_score_caps:
+  - missing_decision_ask: 65
+  - missing_ai_guardrails_for_ai_feature: 70
+  - missing_privacy_rules_for_personalization: 75
+required_validators:
+  - decision-reviewer
+  - ai-safety-reviewer
+  - privacy-reviewer
+forbidden_behaviors:
+  - accuse_ai_use
+  - shame_author
+  - generic_praise
+  - omit_readiness_score
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+  - findings
+  - trace
+notes: >
+  Tests that Shokunin Review correctly identifies improved PRD.
+  Should be better than weak but still have issues.
+  Score should be 55-70 range (improved but not good).
+  Should have evidence and metrics (no caps there).
+  Should still flag missing decision ask, AI guardrails, and privacy rules.

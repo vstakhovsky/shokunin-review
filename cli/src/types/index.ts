@@ -1,5 +1,14 @@
 // Core Types for Shokunin Review CLI
 
+export interface Artifact {
+  type: ArtifactType;
+  content: string;
+  filePath: string;
+  fileName: string;
+  size: number;
+  lines: number;
+}
+
 export enum ArtifactType {
   PRD = 'PRD',
   RFC = 'RFC',
@@ -87,14 +96,16 @@ export interface ReviewOutput {
     review_mode: ReviewMode;
     duration_seconds: number;
     timestamp: string;
+    review_run_id?: string;
   };
+  trace?: any; // ScoringTrace - will be defined in reviewEngine
 }
 
 export interface ReviewOptions {
   mode: ReviewMode;
-  verbose: boolean;
-  local_only: boolean;
-  no_trace: boolean;
+  verbose?: boolean;
+  local_only?: boolean;
+  no_trace?: boolean;
   focus_validator?: string;
   output_file?: string;
 }

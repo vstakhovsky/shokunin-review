@@ -166,6 +166,9 @@ shokunin improve <file>             # Suggest improvements
 shokunin rerun <file> --compare <original-file>  # Re-review and compare
 shokunin score <file>               # Show readiness score breakdown
 shokunin eval                       # Run eval harness
+shokunin feedback <file>            # Report incorrect review results
+shokunin correct <file>             # Enter interactive correction mode
+shokunin feedback-summary           # Show feedback statistics
 ```
 
 ### Output modes
@@ -190,6 +193,63 @@ shokunin eval                       # Run eval harness
 /shokunin-rerun                # Re-review
 /shokunin-score               # Explain readiness score
 ```
+
+---
+
+## Reporting incorrect review results
+
+Shokunin Review is designed to be corrected. If a review output is incorrect or unhelpful, you can report feedback to help improve the system.
+
+### Feedback commands
+
+**Report a false positive finding:**
+```bash
+shokunin feedback docs/prd.md --finding F-002 --type false_positive
+```
+
+**Report a wrong score:**
+```bash
+shokunin feedback docs/prd.md --score --type too_high
+shokunin feedback docs/prd.md --score --type too_low
+```
+
+**Report a missed issue:**
+```bash
+shokunin feedback docs/prd.md --type missed_issue
+```
+
+**Enter interactive correction mode:**
+```bash
+shokunin correct docs/prd.md
+```
+
+**View feedback summary:**
+```bash
+shokunin feedback-summary
+```
+
+### Feedback types
+
+Shokunin accepts feedback on:
+
+- **False positives:** Findings that are incorrect or not relevant
+- **False negatives:** Issues that should have been detected but weren't
+- **Score calibration:** Scores that are too high or too low
+- **Severity issues:** Findings with wrong severity levels
+- **Missed issues:** Important issues not detected by validators
+- **Generic output:** Feedback that is too vague or not actionable
+- **Overengineering:** Solutions that are overly complex
+
+### Where feedback is stored
+
+Feedback is stored locally in `.shokunin/feedback/feedback-log.jsonl` and can be converted into eval candidates for validator improvement.
+
+### Quality assurance
+
+- One feedback event does not automatically change scoring logic
+- Multiple similar feedback events trigger improvement recommendations
+- Feedback can be reviewed and converted into evals
+- Manual approval required before changing validators
 
 ---
 

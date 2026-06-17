@@ -1,15 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { ArtifactType } from '../types';
-
-export interface Artifact {
-  type: ArtifactType;
-  content: string;
-  filePath: string;
-  fileName: string;
-  size: number;
-  lines: number;
-}
+import { Artifact, ArtifactType } from '../types';
 
 export class FileProcessor {
   /**
