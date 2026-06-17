@@ -94,45 +94,55 @@ export class ReviewEngine {
     // Step 2: Calculate weighted base score
     const weightedBaseScore = this.calculateWeightedBaseScore(dimensionScores);
 
-    // Step 3: Calculate penalties by severity
+    // Step 3: Calculate penalties by severity (stored as positive numbers for display)
     const penalties = this.calculatePenalties(findings);
-    const blockerPenalties = penalties.blocker * 12;  // -12 each
-    const majorPenalties = penalties.major * 5;     // -5 each
-    const minorPenalties = penalties.minor * 2;     // -2 each
+    const blockerCount = penalties.blocker;
+    const majorCount = penalties.major;
+    const minorCount = penalties.minor;
 
-    // Step 3.5: Anti-bloat penalty
-    const bloatPenalty = this.calculateBloatPenalty(findings, artifact);
+    // Step 3.5: Anti-bloat penalty (stored as positive number for display)
+    const bloatPenaltyAmount = Math.abs(this.calculateBloatPenalty(findings, artifact));
 
-    // Step 4: Subtotal before caps
-    const subtotalBeforeCaps = weightedBaseScore + blockerPenalties + majorPenalties + minorPenalties + bloatPenalty;
+    // Step 4: Calculate penalty totals (as negative values)
+    const blockerPenaltyTotal = -(blockerCount * 12);  // -12 each
+    const majorPenaltyTotal = -(majorCount * 5);        // -5 each
+    const minorPenaltyTotal = -(minorCount * 2);        // -2 each
+    const bloatPenaltyTotal = -bloatPenaltyAmount;     // Already negative
 
-    // Step 5: Apply score caps
+    // Step 5: Subtotal before caps (penalties reduce the score)
+    const subtotalBeforeCaps = weightedBaseScore + blockerPenaltyTotal + majorPenaltyTotal + minorPenaltyTotal + bloatPenaltyTotal;
+
+    // Step 6: Clamp subtotal to 0-100 before applying caps
+    const clampedSubtotal = Math.max(0, Math.min(100, subtotalBeforeCaps));
+
+    // Step 7: Apply score caps (caps can only lower the score, never increase it)
     const scoreCaps = this.determineScoreCaps(findings);
-    let cappedScore = Math.min(subtotalBeforeCaps, this.getStrictestCap(scoreCaps));
+    const strictestCap = this.getStrictestCap(scoreCaps);
+    const cappedScore = Math.min(clampedSubtotal, strictestCap);
 
-    // Step 6: Confidence adjustment
+    // Step 8: Confidence adjustment (applied after caps)
     const confidence = this.calculateConfidence(findings, artifact);
     const confidenceAdjustment = this.getConfidenceAdjustment(confidence);
     const adjustedScore = cappedScore + confidenceAdjustment;
 
-    // Step 7: Final score (ensure 0-100 range)
+    // Step 9: Final score (ensure 0-100 range)
     const finalScore = Math.max(0, Math.min(100, Math.round(adjustedScore)));
 
     const trace: ScoringTrace = {
       weighted_base_score: Math.round(weightedBaseScore),
-      blocker_penalties: blockerPenalties,
-      major_penalties: majorPenalties,
-      minor_penalties: minorPenalties,
-      bloat_penalty: bloatPenalty,
+      blocker_penalties: blockerPenaltyTotal,  // Now negative
+      major_penalties: majorPenaltyTotal,      // Now negative
+      minor_penalties: minorPenaltyTotal,      // Now negative
+      bloat_penalty: bloatPenaltyTotal,        // Already negative
       subtotal_before_caps: Math.round(subtotalBeforeCaps),
       score_caps: scoreCaps,
       confidence_adjustment: confidenceAdjustment,
       final_score: finalScore,
       dimension_scores: dimensionScores,
       penalty_breakdown: [
-        { severity: 'blocker', count: penalties.blocker, total: blockerPenalties },
-        { severity: 'major', count: penalties.major, total: majorPenalties },
-        { severity: 'minor', count: penalties.minor, total: minorPenalties }
+        { severity: 'blocker', count: blockerCount, total: blockerPenaltyTotal },
+        { severity: 'major', count: majorCount, total: majorPenaltyTotal },
+        { severity: 'minor', count: minorCount, total: minorPenaltyTotal }
       ]
     };
 
@@ -152,36 +162,181 @@ export class ReviewEngine {
    */
   private calculateDimensionScores(findings: Finding[], artifact: Artifact): DimensionScore[] {
     const dimensions = this.getDimensionsForArtifactType(artifact.type);
+    const contentLower = artifact.content.toLowerCase();
 
     return dimensions.map(dim => {
       const dimensionFindings = findings.filter(f => f.category === dim.name || f.validator === dim.name);
-      let score = 100;
+
+      // Start with a lower base score - content must earn points
+      let score = 50;
 
       // Apply penalties for findings in this dimension
       for (const finding of dimensionFindings) {
         switch (finding.severity) {
           case 'blocker':
-            score -= 15;
+            score -= 20;
             break;
           case 'high':
-            score -= 7;
+            score -= 10;
             break;
           case 'medium':
-            score -= 3;
+            score -= 5;
             break;
           case 'low':
-            score -= 1;
+            score -= 2;
             break;
         }
       }
 
+      // Add content quality bonuses based on dimension
+      score += this.evaluateDimensionQuality(dim.name, contentLower, artifact);
+
       return {
         name: dim.name,
         weight: dim.weight,
-        score: Math.max(0, score),
+        score: Math.max(0, Math.min(100, score)),
         reason: dimensionFindings.length > 0 ? `${dimensionFindings.length} findings` : undefined
       };
     });
+  }
+
+  /**
+   * Evaluate content quality for a specific dimension
+   */
+  private evaluateDimensionQuality(dimensionName: string, content: string, _artifact: Artifact): number {
+    let qualityBonus = 0;
+
+    switch (dimensionName.toLowerCase()) {
+      case 'problem clarity':
+        // Bonus for quantified problem
+        if (/\d+.*users|customers|people|\d+%\s+of|\$\d+/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Bonus for specific problem statement
+        if (/struggle|difficulty|challenge|pain|issue|problem/.test(content)) {
+          qualityBonus += 10;
+        }
+        // Penalty for vague problem
+        if (/users need|users want|improve|better|enhance/.test(content) &&
+            !(/\d+/.test(content))) {
+          qualityBonus -= 10;
+        }
+        break;
+
+      case 'evidence':
+        // Bonus for data/evidence mentions
+        if (/data shows|according to|research|study|analysis|evidence|baseline/.test(content)) {
+          qualityBonus += 20;
+        }
+        // Bonus for specific numbers
+        if (/\d+%|\d+\s*(users|customers|people|days|weeks)/.test(content)) {
+          qualityBonus += 10;
+        }
+        break;
+
+      case 'target segment':
+        // Bonus for specific user segment
+        if (/target users?|primary segment|customer segment|specific users/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Bonus for demographics
+        if (/aged|income|location|region|behavior|pattern/.test(content)) {
+          qualityBonus += 10;
+        }
+        break;
+
+      case 'mvp scope':
+        // Bonus for clear MVP definition
+        if (/mvp|phase 1|v1|version 1|initial scope/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Bonus for exclusions
+        if (/excludes?|out of scope|not in scope|will not|deferred/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Penalty for vague scope
+        if (/and more|etc|additional features|future enhancements/.test(content)) {
+          qualityBonus -= 10;
+        }
+        break;
+
+      case 'metrics':
+        // Bonus for specific metrics
+        if (/\d+%\s*→|\d+%\s+to|conversion|retention|engagement|churn/.test(content)) {
+          qualityBonus += 20;
+        }
+        // Bonus for target/baseline
+        if (/baseline|target|goal|objective|kpi/.test(content)) {
+          qualityBonus += 10;
+        }
+        // Penalty for vague metrics
+        if (/increase|improve|grow|better|enhance|boost/.test(content) &&
+            !(/\d+/.test(content))) {
+          qualityBonus -= 15;
+        }
+        break;
+
+      case 'requirements':
+        // Bonus for testable requirements
+        if (/must|shall|requirement|spec|criteria|acceptance/.test(content)) {
+          qualityBonus += 10;
+        }
+        // Bonus for specificity
+        if (/when|if|then|condition|trigger/.test(content)) {
+          qualityBonus += 10;
+        }
+        break;
+
+      case 'technical feasibility':
+        // Bonus for technical approach
+        if (/technical|architecture|implementation|api|database|integration/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Bonus for constraints
+        if (/limit|constraint|capacity|performance|scalability/.test(content)) {
+          qualityBonus += 10;
+        }
+        // Penalty for hand-waving
+        if (/tbd|to be determined|figure out|will consider|later/.test(content)) {
+          qualityBonus -= 10;
+        }
+        break;
+
+      case 'risks & guardrails':
+        // Bonus for risk consideration
+        if (/risk|mitigation|fallback|contingency|plan b/.test(content)) {
+          qualityBonus += 15;
+        }
+        // Bonus for guardrails
+        if (/guardrail|safety|limit|boundary|threshold|monitor/.test(content)) {
+          qualityBonus += 15;
+        }
+        break;
+
+      case 'decision readiness':
+        // Bonus for decision ask
+        if (/decision|approval|go.?no.?go|proceed|sign.?off|ask/.test(content)) {
+          qualityBonus += 20;
+        }
+        // Bonus for timeline
+        if (/timeline|by|deadline|date|week|month/.test(content)) {
+          qualityBonus += 10;
+        }
+        // Bonus for decision makers
+        if (/stakeholder|approver|reviewer|sponsor|owner/.test(content)) {
+          qualityBonus += 5;
+        }
+        break;
+
+      default:
+        // Generic quality bonus for other dimensions
+        if (content.length > 100) {
+          qualityBonus += 5;
+        }
+        break;
+    }
+
+    return qualityBonus;
   }
 
   /**
