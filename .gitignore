@@ -2,3 +2,5 @@
 .DS_Store
 .shokunin/
 build.log
+test.log
+cli/.shokunin/

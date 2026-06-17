@@ -68,9 +68,9 @@ shokunin eval                       # Run eval harness
 ### MVP 1 Documentation
 
 - ✅ README.md (comprehensive landing page)
-- ✅ DESIGN.md (terminal UX, mascot, design system)
-- ✅ FUNCTIONAL_REQUIREMENTS.md (FR-1 through FR-12)
-- ✅ NON_FUNCTIONAL_REQUIREMENTS.md (reliability, usability, safety)
+- ✅ docs/architecture/system-architecture.md (terminal UX, mascot, design system)
+- ✅ docs/product/functional-requirements.md (FR-1 through FR-12)
+- ✅ docs/product/non-functional-requirements.md (reliability, usability, safety)
 - ✅ SECURITY.md (security requirements and warnings)
 - ✅ docs/mvp-scope.md (what MVP 1 supports/excludes)
 - ✅ docs/limitations.md (known limitations)
@@ -318,9 +318,9 @@ v1.0 requires:
 
 **Completed**:
 - ✅ README.md
-- ✅ DESIGN.md
-- ✅ FUNCTIONAL_REQUIREMENTS.md
-- ✅ NON_FUNCTIONAL_REQUIREMENTS.md
+- ✅ docs/architecture/system-architecture.md
+- ✅ docs/product/functional-requirements.md
+- ✅ docs/product/non-functional-requirements.md
 - ✅ SECURITY.md
 
 **In Progress**:

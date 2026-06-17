@@ -354,14 +354,45 @@ shokunin review file.md --local-only --no-trace
 
 ---
 
-## Documentation map
+## Repository Map
+
+```text
+cli/          CLI implementation
+docs/         Product, architecture, and implementation documentation
+examples/     Example PRDs, RFCs, experiment plans, and strategy docs
+harness/      Eval configurations and review calibration assets
+skills/       Claude-style skill definitions
+references/   Validators, scoring rules, and checklists
+templates/    Output and document templates
+assets/       Diagrams, screenshots, and brand assets
+archive/      Historical prompts and old working materials
+```
+
+## Documentation
+
+- [Documentation Index](./docs/README.md)
+- [Architecture](./docs/architecture/system-architecture.md)
+- [Scoring Model](./docs/architecture/scoring-model.md)
+- [Feedback Loop](./docs/architecture/feedback-loop.md)
+- [Functional Requirements](./docs/product/functional-requirements.md)
+- [Non-Functional Requirements](./docs/product/non-functional-requirements.md)
+
+## Skills
+
+Initial skills are stored in [`skills/`](./skills):
+
+- [`shokunin-review`](./skills/shokunin-review/SKILL.md)
+- [`shokunin-review-prd`](./skills/shokunin-review-prd/SKILL.md)
+- [`shokunin-feedback-correction`](./skills/shokunin-feedback-correction/SKILL.md)
+
+## Documentation Map
 
 | Area | Link |
 |---|---|
 | MVP scope | docs/mvp-scope.md |
-| Design system | DESIGN.md |
-| Functional requirements | FUNCTIONAL_REQUIREMENTS.md |
-| Non-functional requirements | NON_FUNCTIONAL_REQUIREMENTS.md |
+| Design system | docs/architecture/system-architecture.md |
+| Functional requirements | docs/product/functional-requirements.md |
+| Non-functional requirements | docs/product/non-functional-requirements.md |
 | Roadmap | ROADMAP.md |
 | Security | SECURITY.md |
 | Limitations | docs/limitations.md |
