@@ -1,5 +1,6 @@
-<img width="1840" height="1228" alt="image" src="https://github.com/user-attachments/assets/c5ce0bc6-d978-4eab-a754-89487f02a964" />
-
+<p align="center">
+  <img src="./assets/README-hero.png" alt="Shokunin Review" width="100%">
+</p>
 
 
 
