@@ -1,0 +1,43 @@
+{
+  "shokunin": {
+    "review_mode": "deep",
+    "output_mode": "default",
+    "mascot": "ascii",
+    "trace_enabled": false,
+    "local_only": false,
+    "max_findings": 5,
+    "max_validators": null,
+    "score_threshold": 75,
+    "timeout_seconds": 120
+  },
+  "validators": {
+    "decision_reviewer": {
+      "enabled": true,
+      "priority": "critical"
+    },
+    "evidence_reviewer": {
+      "enabled": true,
+      "priority": "critical"
+    },
+    "metric_reviewer": {
+      "enabled": true,
+      "priority": "critical"
+    }
+  },
+  "output": {
+    "short_default": true,
+    "include_rationale": true,
+    "include_examples": true,
+    "tone": "calm_direct"
+  },
+  "security": {
+    "warn_sensitive_content": true,
+    "sensitive_patterns": [
+      "api_key",
+      "secret",
+      "password",
+      "sk_",
+      "AIza"
+    ]
+  }
+}

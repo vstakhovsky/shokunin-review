@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Trace Schema",
+  "type": "object",
+  "description": "Schema for review execution traces",
+  "required": ["trace_id", "artifact_type", "timestamp", "steps"],
+  "properties": {
+    "trace_id": {
+      "type": "string",
+      "description": "Unique trace identifier"
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": ["PRD", "RFC", "EXPERIMENT_PLAN", "PRODUCT_STRATEGY"],
+      "description": "Type of artifact reviewed"
+    },
+    "artifact_file": {
+      "type": "string",
+      "description": "Path to artifact file"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When review started"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "description": "How long review took"
+    },
+    "review_mode": {
+      "type": "string",
+      "enum": ["fast", "deep", "draft"],
+      "description": "Review mode used"
+    },
+    "classification_confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "Confidence in classification"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "validator", "duration_ms"],
+        "properties": {
+          "step": {
+            "type": "string",
+            "enum": ["intake", "classify", "spec", "route", "validate", "audit", "score", "verify", "output"]
+          },
+          "validator": {
+            "type": "string",
+            "description": "Validator or component name"
+          },
+          "duration_ms": {
+            "type": "number",
+            "description": "Step duration in milliseconds"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["success", "warning", "error"],
+            "description": "Step status"
+          },
+          "findings_count": {
+            "type": "integer",
+            "description": "Number of findings produced"
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Finding IDs produced"
+    },
+    "score": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "integer" },
+        "confidence": { "type": "string" },
+        "band": { "type": "string" }
+      }
+    },
+    "output_size": {
+      "type": "integer",
+      "description": "Output size in bytes"
+    }
+  }
+}

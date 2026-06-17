@@ -1,0 +1,27 @@
+id: experiment-plan-weak
+artifact_type: EXPERIMENT_PLAN
+input_file: examples/experiments/checkout-ab-test.before.md
+expected_tags:
+  - experiment-gap
+  - metric-fog
+expected_score_band: Needs revision
+expected_score: 40-59
+expected_score_caps:
+  - no_hypothesis: 55
+  - no_primary_metric: 50
+  - no_decision_rule: 55
+  - no_guardrail_metrics: 70
+required_validators:
+  - metric-reviewer
+  - strategy-reviewer
+forbidden_behaviors:
+  - reject_as_prd
+  - generic_praise
+required_output_fields:
+  - verdict
+  - score
+  - top_blockers
+notes: >
+  Tests that Shokunin Review correctly identifies weak experiment plan.
+  Should flag missing hypothesis, decision rule, guardrail metrics.
+  Should correctly classify as experiment plan.

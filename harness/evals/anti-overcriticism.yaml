@@ -1,0 +1,27 @@
+id: anti-overcriticism
+artifact_type: PRD
+input_file: examples/prd/weak-ai-food-agent.after.md
+expected_tags: []
+expected_score_band: Ready with minor fixes
+expected_score: 75-89
+expected_score_caps:
+  - none
+required_validators:
+  - all
+forbidden_behaviors:
+  - score_below_70
+  - flag_style_nits_as_blockers
+  - flag_minor_issues_as_blockers
+  - overcriticize_good_document
+  - recommend_full_rewrite
+required_output_fields:
+  - verdict
+  - score
+  - improvements
+  - remaining_blockers
+notes: >
+  Tests that Shokunin Review does not overcriticize good documents.
+  Should acknowledge document is good (75+ score).
+  Should NOT flag style nits as blockers.
+  Should focus on substance over style.
+  Should recommend targeted fixes, not full rewrite.

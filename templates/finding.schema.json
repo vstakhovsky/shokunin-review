@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Finding Schema",
+  "type": "object",
+  "description": "Schema for a single finding",
+  "required": ["id", "validator", "tag", "severity", "issue", "recommended_fix"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique finding identifier"
+    },
+    "validator": {
+      "type": "string",
+      "description": "Validator that produced this finding"
+    },
+    "validator_mode": {
+      "type": "string",
+      "enum": ["full_review", "gap_detection", "not_applicable"],
+      "description": "How validator ran"
+    },
+    "tag": {
+      "type": "string",
+      "description": "Finding category tag"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["blocker", "high", "medium", "low"],
+      "description": "Finding severity level"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "Confidence in this finding"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["decision", "evidence", "metric", "requirement", "technical", "strategy", "cost", "safety"],
+      "description": "Finding category"
+    },
+    "location": {
+      "type": "string",
+      "description": "Location in artifact (line, section)"
+    },
+    "issue": {
+      "type": "string",
+      "description": "What the issue is (1-2 sentences)"
+    },
+    "evidence_from_artifact": {
+      "type": "string",
+      "description": "Quote or description from artifact"
+    },
+    "why_it_matters": {
+      "type": "string",
+      "description": "Impact on review readiness"
+    },
+    "recommended_fix": {
+      "type": "string",
+      "description": "Concrete fix (2-4 sentences)"
+    },
+    "example_fix": {
+      "type": "string",
+      "description": "Specific example of how to fix"
+    },
+    "acceptance_test": {
+      "type": "string",
+      "description": "How to verify the fix"
+    },
+    "needs_human_judgment": {
+      "type": "boolean",
+      "description": "Whether this requires human context"
+    }
+  }
+}

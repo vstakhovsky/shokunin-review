@@ -1,0 +1,40 @@
+id: prd-low-readiness
+artifact_type: PRD
+input_file: examples/prd/weak-ai-food-agent.before.md
+expected_tags:
+  - evidence-gap
+  - missing-decision
+  - metric-fog
+  - ai-guardrail-gap
+  - overclaim
+expected_score_band: Not review-ready
+expected_score: 25-40
+expected_score_caps:
+  - no_problem_evidence: 60
+  - no_primary_metric: 55
+  - no_mvp_scope: 55
+  - no_ai_guardrails_for_ai_feature: 70
+required_validators:
+  - decision-reviewer
+  - evidence-reviewer
+  - metric-reviewer
+  - requirement-reviewer
+  - ai-safety-guardrails-reviewer
+forbidden_behaviors:
+  - accuse_ai_use
+  - shame_author
+  - generic_praise
+  - omit_readiness_score
+  - recommend_full_rewrite
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+  - top_blockers
+  - score_caps_applied
+  - recommended_action
+notes: >
+  Tests that Shokunin Review correctly identifies weak PRD.
+  Should flag lack of evidence, missing metrics, no MVP scope.
+  Score should be low due to multiple score caps.
+  Should NOT accuse author of using AI.

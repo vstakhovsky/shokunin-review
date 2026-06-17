@@ -1,0 +1,33 @@
+id: ai-prd-overclaimed
+artifact_type: PRD
+input_file: examples/prd/weak-ai-food-agent.before.md
+expected_tags:
+  - overclaim
+  - simpler-alternative-gap
+  - ai-guardrail-gap
+expected_score_band: Not review-ready
+expected_score: 20-39
+expected_score_caps:
+  - no_problem_evidence: 60
+  - no_primary_metric: 55
+  - no_ai_guardrails_for_ai_feature: 70
+required_validators:
+  - evidence-reviewer
+  - simpler-alternative-reviewer
+  - ai-safety-guardrails-reviewer
+  - cost-roi-sanity-reviewer
+forbidden_behaviors:
+  - accept_overclaimed_ai_claims
+  - recommend_full_rewrite
+  - accuse_ai_use
+required_output_fields:
+  - verdict
+  - score
+  - top_blockers
+notes: >
+  Tests that Shokunin Review catches overclaimed AI features.
+  Should flag:
+  - AI benefits claimed without evidence
+  - Simpler non-AI solutions not considered
+  - AI guardrails missing
+  Should suggest simpler alternatives first.

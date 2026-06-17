@@ -1,0 +1,24 @@
+id: rfc-good-minimal
+artifact_type: RFC
+input_file: examples/rfc/vague-risk-engine.after.md
+expected_tags:
+  - tradeoff-gap  # May still have minor trade-off issues
+expected_score_band: Review-ready
+expected_score: 90-100
+expected_score_caps:
+  - none
+required_validators:
+  - technical-feasibility-reviewer
+  - strategy-reviewer
+forbidden_behaviors:
+  - score_below_85
+  - flag_minor_issues_as_blockers
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+notes: >
+  Tests that Shokunin Review correctly identifies good RFC.
+  Score should be high (90+).
+  Should acknowledge technical competence.
+  Should NOT flag minor style issues.

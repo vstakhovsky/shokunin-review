@@ -1,0 +1,29 @@
+id: rfc-vague
+artifact_type: RFC
+input_file: examples/rfc/vague-risk-engine.before.md
+expected_tags:
+  - tech-handwave
+  - architecture-gap
+  - tradeoff-gap
+  - dependency-gap
+expected_score_band: Needs revision
+expected_score: 40-59
+expected_score_caps:
+  - no_technical_decision: 60
+  - no_alternatives: 65
+  - no_tradeoffs: 70
+required_validators:
+  - technical-feasibility-reviewer
+  - strategy-reviewer
+  - simpler-alternative-reviewer
+forbidden_behaviors:
+  - reject_as_prd
+  - generic_praise
+required_output_fields:
+  - verdict
+  - score
+  - top_blockers
+notes: >
+  Tests that Shokunin Review correctly identifies vague RFC.
+  Should flag lack of technical detail, alternatives, trade-offs.
+  Should correctly classify as RFC, not PRD.

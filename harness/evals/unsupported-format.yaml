@@ -1,0 +1,19 @@
+id: unsupported-format
+artifact_type: UNKNOWN
+input_file: unsupported.pptx
+expected_tags: []
+expected_score_band: Unsupported
+expected_score: null
+required_validators: []
+forbidden_behaviors:
+  - attempt_review_of_unsupported
+  - crash_on_unsupported
+required_output_fields:
+  - unsupported_message
+  - supported_formats
+  - suggested_action
+notes: >
+  Tests that Shokunin Review handles unsupported formats gracefully.
+  Should display clear unsupported format message.
+  Should suggest exporting as Markdown or plain text.
+  Should NOT crash or hang.

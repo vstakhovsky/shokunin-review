@@ -1,0 +1,20 @@
+id: experiment-plan-good-minimal
+artifact_type: EXPERIMENT_PLAN
+input_file: examples/experiments/checkout-ab-test.after.md
+expected_tags: []
+expected_score_band: Review-ready
+expected_score: 90-100
+expected_score_caps:
+  - none
+required_validators:
+  - metric-reviewer
+forbidden_behaviors:
+  - score_below_85
+required_output_fields:
+  - verdict
+  - score
+  - confidence
+notes: >
+  Tests that Shokunin Review correctly identifies good experiment plan.
+  Should have clear hypothesis, metrics, decision rule, guardrails.
+  Score should be 90+.

@@ -1,0 +1,31 @@
+id: product-strategy-vague
+artifact_type: PRODUCT_STRATEGY
+input_file: examples/strategy/ai-growth-strategy.before.md
+expected_tags:
+  - strategy-fog
+  - opportunity-fog
+  - segment-fog
+  - tradeoff-gap
+expected_score_band: Needs major fixes
+expected_score: 60-74
+expected_score_caps:
+  - no_strategic_thesis: 60
+  - no_target_segment: 60
+  - no_opportunity_sizing: 65
+  - no_tradeoffs: 70
+  - generic_strategy_only: 55
+required_validators:
+  - strategy-reviewer
+  - opportunity-sizing-reviewer
+  - simpler-alternative-reviewer
+forbidden_behaviors:
+  - reject_as_prd
+  - generic_praise
+required_output_fields:
+  - verdict
+  - score
+  - top_blockers
+notes: >
+  Tests that Shokunin Review correctly identifies vague strategy.
+  Should flag lack of strategic thesis, opportunity sizing, trade-offs.
+  Should correctly classify as strategy document.

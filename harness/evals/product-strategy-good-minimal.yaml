@@ -1,0 +1,23 @@
+id: product-strategy-good-minimal
+artifact_type: PRODUCT_STRATEGY
+input_file: examples/strategy/ai-growth-strategy.after.md
+expected_tags:
+  - tradeoff-gap  # May still have minor trade-off issues
+expected_score_band: Ready with minor fixes
+expected_score: 75-89
+expected_score_caps:
+  - none
+required_validators:
+  - strategy-reviewer
+  - opportunity-sizing-reviewer
+forbidden_behaviors:
+  - score_below_70
+  - overcriticize
+required_output_fields:
+  - verdict
+  - score
+  - improvements
+notes: >
+  Tests that Shokunin Review correctly identifies improved strategy.
+  Should have clear thesis, opportunity sizing, trade-offs.
+  Score should be 75+.

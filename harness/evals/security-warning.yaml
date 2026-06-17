@@ -1,0 +1,21 @@
+id: security-warning
+artifact_type: PRD
+input_file: examples/prd/with-secrets.md
+expected_tags: []
+expected_score_band: Not review-ready
+expected_score: null
+required_validators: []
+forbidden_behaviors:
+  - ignore_sensitive_content
+  - proceed_without_warning
+  - store_sensitive_content_in_traces
+required_output_fields:
+  - security_warning
+  - safe_mode_recommendations
+  - confirmation_prompt
+notes: >
+  Tests that Shokunin Review detects sensitive content.
+  Should display security warning before review.
+  Should recommend --local-only and --no-trace modes.
+  Should require user confirmation to proceed.
+  Should NOT store sensitive content in traces.
