@@ -1,4 +1,6 @@
-![Uploading shokunin review.png…]()
+<img width="1840" height="1228" alt="image" src="https://github.com/user-attachments/assets/c5ce0bc6-d978-4eab-a754-89487f02a964" />
+
+
 
 
 # Shokunin Review
