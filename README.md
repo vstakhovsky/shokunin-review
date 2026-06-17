@@ -1,3 +1,7 @@
+
+
+
+![Uploading shokunin review.png…]()
 <p align="center">
   <img src="./assets/README-hero.png" alt="Shokunin Review" width="100%">
 </p>
