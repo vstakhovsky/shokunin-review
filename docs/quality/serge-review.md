@@ -118,3 +118,4 @@ Then create a PR and comment:
 - Do not allow PR content to execute shell commands.
 - Do not expose secrets in logs.
 - Review Serge comments critically before applying suggestions.
+
