@@ -354,6 +354,28 @@ shokunin review file.md --local-only --no-trace
 
 ---
 
+## AI Code Review with Serge
+
+This repository includes optional Hugging Face Serge setup for AI-assisted Pull Request review.
+
+Serge can review PR diffs and comment on issues related to TypeScript correctness, CLI behavior, scoring logic, feedback loops, GitHub Actions, and security-sensitive automation.
+
+**Configuration:**
+
+- [Serge review rules](./.ai/review-rules.md)
+- [Serge setup guide](./docs/quality/serge-review.md)
+- [GitHub workflow](./.github/workflows/serge-review.yml)
+
+**Trigger Serge on a PR by commenting:**
+
+```text
+@askserge please review
+```
+
+Serge is not a complete security scanner. Use it together with tests, TypeScript checks, dependency checks, CodeQL, Dependabot, and human review.
+
+---
+
 ## Repository Map
 
 ```text

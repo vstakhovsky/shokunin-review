@@ -1,0 +1,27 @@
+name: Serge AI Review
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  serge-review:
+    name: Serge PR Review
+    runs-on: ubuntu-latest
+
+    # Only run on comments that mention @askserge.
+    # This keeps the workflow manual and avoids noisy automatic reviews.
+    if: contains(github.event.comment.body, '@askserge')
+
+    steps:
+      - name: Run Serge
+        uses: huggingface/serge@main
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
