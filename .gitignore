@@ -4,3 +4,6 @@
 build.log
 test.log
 cli/.shokunin/
+.env
+.env.local
+*.key
