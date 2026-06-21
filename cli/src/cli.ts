@@ -62,6 +62,11 @@ program
   .command('eval')
   .description('Run evaluation harness')
   .option('--filter <pattern>', 'filter evals by pattern')
+  .option('--strict', 'use strict regression thresholds')
+  .option('--report', 'generate markdown report')
+  .option('--trace', 'save per-case trace JSON files')
+  .option('--no-trace', 'do not save trace files')
+  .option('--repeat <n>', 'run each eval N times for stability testing', '1')
   .option('--verbose', 'show detailed eval output')
   .option('--golden', 'update golden outputs')
   .action(evalCommand);

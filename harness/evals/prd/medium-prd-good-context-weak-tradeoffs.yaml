@@ -1,0 +1,41 @@
+id: medium-prd-good-context-weak-tradeoffs
+artifact_type: PRD
+input_file: examples/eval-cases/prd/medium-prd-good-context-weak-tradeoffs.md
+
+expected_score_band: Needs major fixes
+expected_score_range:
+  min: 60
+  max: 74
+
+expected_findings:
+  must_detect:
+    - id: tradeoffs_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No trade-off analysis between SMS and alternatives"
+    - id: alternatives_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No explicit alternatives considered"
+    - id: rejected_options_missing
+      severity: medium
+      category: tradeoffs
+      evidence_hint: "No discussion of why other options were rejected"
+    - id: rollout_plan_incomplete
+      severity: medium
+      category: rollout
+      evidence_hint: "Incomplete rollout details"
+
+  should_not_detect:
+    - id: success_metrics_missing
+      reason: "Metrics are clearly defined with targets"
+    - id: customer_problem_weak
+      reason: "Customer problem is clearly stated with context"
+
+  critical_misses:
+    - tradeoffs_missing
+    - alternatives_missing
+
+notes: >
+  Tests that Shokunin catches a PRD with good context but weak trade-off analysis.
+  Expected score 60-74 due to good context/evidence/metrics but missing trade-offs.

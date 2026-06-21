@@ -1,0 +1,39 @@
+id: weak-prd-no-risks
+artifact_type: PRD
+input_file: examples/eval-cases/prd/weak-prd-no-risks.md
+
+expected_score_band: Not review-ready
+expected_score_range:
+  min: 30
+  max: 50
+
+expected_findings:
+  must_detect:
+    - id: risk_coverage_incomplete
+      severity: high
+      category: risk
+      evidence_hint: "No risk section at all"
+    - id: product_risk_missing
+      severity: high
+      category: risk
+      evidence_hint: "No consideration of adoption risk"
+    - id: technical_risk_missing
+      severity: high
+      category: risk
+      evidence_hint: "No technical feasibility or implementation risks"
+    - id: operational_risk_missing
+      severity: medium
+      category: risk
+      evidence_hint: "No operational support or maintenance risks"
+
+  critical_misses:
+    - risk_coverage_incomplete
+    - product_risk_missing
+
+expected_score_caps:
+  - cap: no_risk_section
+    max_score: 70
+
+notes: >
+  Tests that Shokunin catches a PRD with no risk analysis.
+  Expected score 30-50 due to complete lack of risk consideration.

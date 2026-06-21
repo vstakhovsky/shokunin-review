@@ -1,0 +1,71 @@
+id: weak-prd-missing-decisions
+artifact_type: PRD
+input_file: examples/eval-cases/prd/weak-prd-missing-decisions.md
+
+expected_score_band: Not review-ready
+expected_score_range:
+  min: 25
+  max: 45
+
+expected_findings:
+  must_detect:
+    - id: decision_traceability_missing
+      severity: high
+      category: decision_quality
+      evidence_hint: "No decision log, no explicit options, no rejected alternatives"
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No primary metric, no proxy metrics, no guardrails"
+    - id: unclear_owner
+      severity: medium
+      category: ownership
+      evidence_hint: "No accountable product, engineering, data, or ops owner"
+    - id: rollout_plan_missing
+      severity: medium
+      category: rollout
+      evidence_hint: "No rollout or implementation plan"
+
+  should_not_detect:
+    - id: security_vulnerability
+      reason: "The document does not include implementation or security-sensitive design"
+    - id: pii_leakage
+      reason: "No PII handling is described"
+
+  critical_misses:
+    - decision_traceability_missing
+    - success_metrics_missing
+
+expected_score_caps:
+  - cap: no_primary_metric
+    max_score: 55
+  - cap: no_mvp_scope
+    max_score: 55
+
+recommendation_expectation:
+  must_be:
+    - specific
+    - actionable
+    - tied_to_evidence
+  must_include_patterns:
+    - "add a decision log"
+    - "define success metrics"
+    - "add guardrail metrics"
+  must_not_be:
+    - generic
+    - vague
+
+tone_expectation:
+  must_be:
+    - calm
+    - professional
+    - direct
+    - non-toxic
+  must_not_be:
+    - sarcastic
+    - insulting
+    - dismissive
+
+notes: >
+  Tests that Shokunin catches a weak PRD that sounds plausible but is not decision-ready.
+  Expected score 25-45 due to missing critical elements (decisions, metrics, owner, rollout).

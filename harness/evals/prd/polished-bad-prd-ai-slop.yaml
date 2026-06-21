@@ -1,0 +1,51 @@
+id: polished-bad-prd-ai-slop
+artifact_type: PRD
+input_file: examples/eval-cases/prd/polished-bad-prd-ai-slop.md
+
+expected_score_band: Not review-ready
+expected_score_range:
+  min: 25
+  max: 45
+
+expected_findings:
+  must_detect:
+    - id: evidence_missing
+      severity: high
+      category: evidence
+      evidence_hint: "Polished language but no actual data or baseline"
+    - id: unclear_scope
+      severity: high
+      category: mvp_scope
+      evidence_hint: "No MVP boundary or scope definition"
+    - id: overclaim
+      severity: high
+      category: evidence
+      evidence_hint: "Overclaimed ROI without supporting analysis"
+    - id: simpler_alternative_gap
+      severity: medium
+      category: alternatives
+      evidence_hint: "No analysis of simpler alternatives"
+    - id: cost_roi_gap
+      severity: medium
+      category: cost_analysis
+      evidence_hint: "No cost or ROI analysis"
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No specific metrics defined"
+
+  critical_misses:
+    - evidence_missing
+    - success_metrics_missing
+
+expected_score_caps:
+  - cap: no_evidence
+    max_score: 60
+  - cap: no_primary_metric
+    max_score: 55
+  - cap: overclaim
+    max_score: 60
+
+notes: >
+  Tests that Shokunin is not fooled by polished language without substance.
+  Expected score 25-45 due to AI slop with buzzwords but no actual content.

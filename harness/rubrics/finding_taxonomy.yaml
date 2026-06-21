@@ -1,0 +1,146 @@
+# Shokunin Finding Taxonomy
+# Normalized finding IDs for eval comparison
+
+decision_quality:
+  - decision_traceability_missing
+  - missing_decision_log
+  - alternatives_missing
+  - rejected_options_missing
+  - unclear_decision_owner
+  - no_decision_ask
+  - decision_context_missing
+
+metrics:
+  - success_metrics_missing
+  - primary_metric_missing
+  - proxy_metrics_missing
+  - guardrail_metrics_missing
+  - vanity_metrics_only
+  - measurement_plan_missing
+  - no_baseline
+  - target_missing
+  - metric_fog
+
+risk:
+  - risk_coverage_incomplete
+  - product_risk_missing
+  - business_risk_missing
+  - technical_risk_missing
+  - legal_compliance_risk_missing
+  - operational_risk_missing
+  - team_resource_risk_missing
+  - critical_risk_missed
+  - no_mitigation_plan
+  - no_rollback_plan
+
+tradeoffs:
+  - tradeoffs_missing
+  - alternatives_not_compared
+  - chosen_option_not_justified
+  - constraints_missing
+  - no_decision_rationale
+
+evidence:
+  - evidence_missing
+  - no_problem_evidence
+  - baseline_missing
+  - customer_problem_weak
+  - market_or_user_claim_unsubstantiated
+  - evidence_gap
+  - unsupported_claims
+  - overclaim
+
+requirements:
+  - requirements_ambiguous
+  - acceptance_criteria_missing
+  - non_goals_missing
+  - scope_unclear
+  - requirement_fog
+  - untestable_requirements
+  - non_goals_undefined
+
+experiment_design:
+  - hypothesis_missing
+  - sample_size_missing
+  - decision_rule_missing
+  - guardrail_metrics_missing
+  - segmentation_missing
+  - experiment_duration_missing
+  - no_experiment_design
+
+technical_feasibility:
+  - technical_handwaving
+  - dependency_missing
+  - failure_modes_missing
+  - rollback_plan_missing
+  - api_contract_missing
+  - observability_missing
+  - no_technical_approach
+  - implementation_details_missing
+
+strategy:
+  - segment_missing
+  - strategic_choice_unclear
+  - sequencing_missing
+  - constraints_missing
+  - roi_logic_missing
+  - no_competitive_analysis
+  - strategy_fog
+
+mvp_scope:
+  - mvp_fog
+  - no_mvp_scope
+  - phase_missing
+  - exclusions_missing
+  - out_of_scope_undefined
+  - scope_creep_indicators
+
+ownership:
+  - unclear_owner
+  - no_owner
+  - stakeholder_missing
+  - decision_maker_missing
+
+rollout:
+  - rollout_plan_missing
+  - rollout_plan_incomplete
+  - no_staged_rollout
+  - no_phased_launch
+  - migration_plan_missing
+
+output_quality:
+  - generic_recommendation
+  - hallucinated_gap
+  - false_positive_finding
+  - toxic_or_dismissive_tone
+  - missing_readiness_score
+  - missing_recommended_action
+  - document_bloat
+
+ai_specific:
+  - no_ai_guardrails
+  - ai_guardrail_gap
+  - no_personal_data_rules
+  - privacy_gap
+  - no_safety_mechanisms
+  - no_model_monitoring
+
+cost_analysis:
+  - cost_roi_gap
+  - no_cost_model
+  - no_roi_analysis
+  - cost_estimate_missing
+  - resource_estimate_missing
+
+alternatives:
+  - simpler_alternative_gap
+  - no_simpler_alternative
+  - alternatives_not_considered
+  - build_vs_buy_missing
+
+placeholders:
+  - placeholder
+  - tbd
+  - critical_placeholders_present
+  - to_do
+  - incomplete_content

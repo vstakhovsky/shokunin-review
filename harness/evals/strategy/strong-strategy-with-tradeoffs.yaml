@@ -1,0 +1,23 @@
+id: strong-strategy-with-tradeoffs
+artifact_type: PRODUCT_STRATEGY
+input_file: examples/eval-cases/strategy/strong-strategy-with-tradeoffs.md
+
+expected_score_band: Review-ready
+expected_score_range:
+  min: 85
+  max: 95
+
+expected_findings:
+  should_not_detect:
+    - id: tradeoffs_missing
+      reason: "Strategic trade-offs are documented"
+    - id: segment_missing
+      reason: "Target segment is clearly defined"
+    - id: constraints_missing
+      reason: "Constraints are explicitly discussed"
+    - id: strategic_choice_unclear
+      reason: "Strategic choices are clear and justified"
+
+notes: >
+  Tests that Shokunin does not overcriticize a strong strategy document.
+  Should have minimal findings. Expected score 85-95.

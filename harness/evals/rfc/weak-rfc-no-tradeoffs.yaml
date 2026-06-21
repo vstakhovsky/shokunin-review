@@ -1,0 +1,31 @@
+id: weak-rfc-no-tradeoffs
+artifact_type: RFC
+input_file: examples/eval-cases/rfc/weak-rfc-no-tradeoffs.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 45
+  max: 60
+
+expected_findings:
+  must_detect:
+    - id: tradeoffs_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "RFC lacks trade-off analysis"
+    - id: alternatives_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No alternative approaches considered"
+
+  critical_misses:
+    - tradeoffs_missing
+    - alternatives_missing
+
+expected_score_caps:
+  - cap: no_tradeoffs_for_rfc_or_strategy
+    max_score: 70
+
+notes: >
+  Tests that Shokunin catches an RFC with no trade-off analysis.
+  Expected score 45-60 due to missing critical RFC elements.

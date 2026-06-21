@@ -1,0 +1,26 @@
+id: good-prd-should-not-be-overcriticized
+artifact_type: PRD
+input_file: examples/eval-cases/prd/good-prd-should-not-be-overcriticized.md
+
+expected_score_band: Review-ready
+expected_score_range:
+  min: 80
+  max: 90
+
+expected_findings:
+  should_not_detect:
+    - id: decision_traceability_missing
+      reason: "Simple document for small feature doesn't need extensive decision log"
+    - id: success_metrics_missing
+      reason: "Single clear metric is defined"
+    - id: tradeoffs_missing
+      reason: "Small internal improvement doesn't need extensive trade-off analysis"
+    - id: rollout_plan_missing
+      reason: "Simple rollout plan is appropriate for scope"
+    - id: risk_coverage_incomplete
+      reason: "Small internal feature has minimal risk exposure"
+
+notes: >
+  Tests that Shokunin does not overcriticize a simple, good PRD.
+  Should have minimal findings. Expected score 80-90.
+  Purpose: Test anti-overcriticism for small, well-scoped features.

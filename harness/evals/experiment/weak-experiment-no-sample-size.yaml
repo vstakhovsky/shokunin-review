@@ -1,0 +1,30 @@
+id: weak-experiment-no-sample-size
+artifact_type: EXPERIMENT_PLAN
+input_file: examples/eval-cases/experiment/weak-experiment-no-sample-size.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 45
+  max: 60
+
+expected_findings:
+  must_detect:
+    - id: sample_size_missing
+      severity: high
+      category: experiment_design
+      evidence_hint: "No sample size or power analysis"
+    - id: experiment_duration_missing
+      severity: medium
+      category: experiment_design
+      evidence_hint: "No experiment duration specified"
+
+  critical_misses:
+    - sample_size_missing
+
+expected_score_caps:
+  - cap: no_experiment_design
+    max_score: 70
+
+notes: >
+  Tests that Shokunin catches an experiment plan with no sample size analysis.
+  Expected score 45-60 due to missing statistical design elements.

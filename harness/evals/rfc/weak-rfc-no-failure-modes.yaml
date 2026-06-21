@@ -1,0 +1,30 @@
+id: weak-rfc-no-failure-modes
+artifact_type: RFC
+input_file: examples/eval-cases/rfc/weak-rfc-no-failure-modes.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 50
+  max: 65
+
+expected_findings:
+  must_detect:
+    - id: failure_modes_missing
+      severity: high
+      category: technical_feasibility
+      evidence_hint: "No failure mode analysis"
+    - id: rollback_plan_missing
+      severity: medium
+      category: rollout
+      evidence_hint: "No rollback plan"
+
+  critical_misses:
+    - failure_modes_missing
+
+expected_score_caps:
+  - cap: no_rollback_plan
+    max_score: 70
+
+notes: >
+  Tests that Shokunin catches an RFC with no failure mode analysis.
+  Expected score 50-65 due to missing technical feasibility elements.

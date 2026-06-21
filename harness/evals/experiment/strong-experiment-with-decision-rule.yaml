@@ -1,0 +1,23 @@
+id: strong-experiment-with-decision-rule
+artifact_type: EXPERIMENT_PLAN
+input_file: examples/eval-cases/experiment/strong-experiment-with-decision-rule.md
+
+expected_score_band: Review-ready
+expected_score_range:
+  min: 85
+  max: 95
+
+expected_findings:
+  should_not_detect:
+    - id: decision_rule_missing
+      reason: "Clear decision rule is defined"
+    - id: sample_size_missing
+      reason: "Sample size is specified with power analysis"
+    - id: guardrail_metrics_missing
+      reason: "Guardrail metrics are included"
+    - id: experiment_duration_missing
+      reason: "Duration is specified"
+
+notes: >
+  Tests that Shokunin does not overcriticize a strong experiment plan.
+  Should have minimal findings. Expected score 85-95.

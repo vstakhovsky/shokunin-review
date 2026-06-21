@@ -1,0 +1,31 @@
+id: weak-experiment-no-guardrails
+artifact_type: EXPERIMENT_PLAN
+input_file: examples/eval-cases/experiment/weak-experiment-no-guardrails.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 40
+  max: 55
+
+expected_findings:
+  must_detect:
+    - id: guardrail_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No guardrail metrics for negative outcomes"
+    - id: decision_rule_missing
+      severity: high
+      category: experiment_design
+      evidence_hint: "No decision rule defined"
+
+  critical_misses:
+    - guardrail_metrics_missing
+    - decision_rule_missing
+
+expected_score_caps:
+  - cap: no_experiment_decision_rule
+    max_score: 60
+
+notes: >
+  Tests that Shokunin catches an experiment plan with no guardrails or decision rule.
+  Expected score 40-55 due to missing critical experiment elements.
