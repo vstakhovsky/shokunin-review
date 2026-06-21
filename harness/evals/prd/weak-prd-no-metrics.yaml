@@ -1,0 +1,48 @@
+id: weak-prd-no-metrics
+artifact_type: PRD
+input_file: examples/eval-cases/prd/weak-prd-no-metrics.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 35
+  max: 55
+
+expected_findings:
+  must_detect:
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "Vague metrics like 'better checkout', no primary metric"
+    - id: proxy_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No proxy metrics defined"
+    - id: guardrail_metrics_missing
+      severity: medium
+      category: metrics
+      evidence_hint: "No guardrail metrics for negative outcomes"
+    - id: evidence_missing
+      severity: medium
+      category: evidence
+      evidence_hint: "No baseline data or evidence provided"
+    - id: rollout_plan_incomplete
+      severity: medium
+      category: rollout
+      evidence_hint: "Rollout after QA without experiment or staged rollout"
+
+  should_not_detect:
+    - id: legal_risk_missing
+      reason: "Unless the review explains why payment method changes may require compliance review"
+    - id: security_vulnerability
+      reason: "Unless specific implementation risk exists"
+
+  critical_misses:
+    - success_metrics_missing
+
+expected_score_caps:
+  - cap: no_primary_metric
+    max_score: 55
+
+notes: >
+  Tests that Shokunin catches a PRD with vague metrics and no baseline.
+  Expected score 35-55 due to missing primary metric and vague success criteria.

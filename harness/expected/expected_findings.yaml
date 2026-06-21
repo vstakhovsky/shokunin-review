@@ -1,0 +1,232 @@
+# Expected Findings Aggregation
+# This file aggregates expected findings by case ID for easy review and calibration
+
+# PRD Cases
+weak-prd-missing-decisions:
+  must_detect:
+    - id: decision_traceability_missing
+      severity: high
+      category: decision_quality
+      evidence_hint: "No decision log, no explicit options, no rejected alternatives"
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No primary metric, no proxy metrics, no guardrails"
+    - id: unclear_owner
+      severity: medium
+      category: ownership
+      evidence_hint: "No accountable product, engineering, data, or ops owner"
+    - id: rollout_plan_missing
+      severity: medium
+      category: rollout
+      evidence_hint: "No rollout or implementation plan"
+  should_not_detect:
+    - id: security_vulnerability
+      reason: "The document does not include implementation or security-sensitive design"
+    - id: pii_leakage
+      reason: "No PII handling is described"
+
+weak-prd-no-metrics:
+  must_detect:
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "Vague metrics like 'better checkout', no primary metric"
+    - id: proxy_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No proxy metrics defined"
+    - id: guardrail_metrics_missing
+      severity: medium
+      category: metrics
+      evidence_hint: "No guardrail metrics for negative outcomes"
+    - id: evidence_missing
+      severity: medium
+      category: evidence
+      evidence_hint: "No baseline data or evidence provided"
+    - id: rollout_plan_incomplete
+      severity: medium
+      category: rollout
+      evidence_hint: "Rollout after QA without experiment or staged rollout"
+
+weak-prd-no-risks:
+  must_detect:
+    - id: risk_coverage_incomplete
+      severity: high
+      category: risk
+      evidence_hint: "No risk section at all"
+    - id: product_risk_missing
+      severity: high
+      category: risk
+      evidence_hint: "No consideration of adoption risk"
+    - id: technical_risk_missing
+      severity: high
+      category: risk
+      evidence_hint: "No technical feasibility or implementation risks"
+    - id: operational_risk_missing
+      severity: medium
+      category: risk
+      evidence_hint: "No operational support or maintenance risks"
+
+medium-prd-good-context-weak-tradeoffs:
+  must_detect:
+    - id: tradeoffs_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No trade-off analysis between SMS and alternatives"
+    - id: alternatives_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No explicit alternatives considered"
+    - id: rejected_options_missing
+      severity: medium
+      category: tradeoffs
+      evidence_hint: "No discussion of why other options were rejected"
+    - id: rollout_plan_incomplete
+      severity: medium
+      category: rollout
+      evidence_hint: "Incomplete rollout details"
+  should_not_detect:
+    - id: success_metrics_missing
+      reason: "Metrics are clearly defined with targets"
+    - id: customer_problem_weak
+      reason: "Customer problem is clearly stated with context"
+
+strong-prd-with-decision-log:
+  should_not_detect:
+    - id: decision_traceability_missing
+      reason: "Comprehensive decision log is present"
+    - id: success_metrics_missing
+      reason: "Primary metric, proxy metrics, and guardrails are defined"
+    - id: tradeoffs_missing
+      reason: "Trade-offs are documented in decision log"
+    - id: rollout_plan_missing
+      reason: "Rollout plan is detailed"
+    - id: unclear_owner
+      reason: "Clear owner and stakeholders are identified"
+
+polished-bad-prd-ai-slop:
+  must_detect:
+    - id: evidence_missing
+      severity: high
+      category: evidence
+      evidence_hint: "Polished language but no actual data or baseline"
+    - id: unclear_scope
+      severity: high
+      category: mvp_scope
+      evidence_hint: "No MVP boundary or scope definition"
+    - id: overclaim
+      severity: high
+      category: evidence
+      evidence_hint: "Overclaimed ROI without supporting analysis"
+    - id: simpler_alternative_gap
+      severity: medium
+      category: alternatives
+      evidence_hint: "No analysis of simpler alternatives"
+    - id: cost_roi_gap
+      severity: medium
+      category: cost_analysis
+      evidence_hint: "No cost or ROI analysis"
+    - id: success_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No specific metrics defined"
+
+good-prd-should-not-be-overcriticized:
+  should_not_detect:
+    - id: decision_traceability_missing
+      reason: "Simple document for small feature doesn't need extensive decision log"
+    - id: success_metrics_missing
+      reason: "Single clear metric is defined"
+    - id: tradeoffs_missing
+      reason: "Small internal improvement doesn't need extensive trade-off analysis"
+    - id: rollout_plan_missing
+      reason: "Simple rollout plan is appropriate for scope"
+
+# RFC Cases
+weak-rfc-no-tradeoffs:
+  must_detect:
+    - id: tradeoffs_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "RFC lacks trade-off analysis"
+    - id: alternatives_missing
+      severity: high
+      category: tradeoffs
+      evidence_hint: "No alternative approaches considered"
+
+weak-rfc-no-failure-modes:
+  must_detect:
+    - id: failure_modes_missing
+      severity: high
+      category: technical_feasibility
+      evidence_hint: "No failure mode analysis"
+    - id: rollback_plan_missing
+      severity: medium
+      category: rollout
+      evidence_hint: "No rollback plan"
+
+strong-rfc-api-change-with-adr:
+  should_not_detect:
+    - id: tradeoffs_missing
+      reason: "ADR includes trade-off analysis"
+    - id: alternatives_missing
+      reason: "Alternatives are compared in ADR"
+    - id: failure_modes_missing
+      reason: "Failure modes are considered"
+
+# Experiment Cases
+weak-experiment-no-guardrails:
+  must_detect:
+    - id: guardrail_metrics_missing
+      severity: high
+      category: metrics
+      evidence_hint: "No guardrail metrics for negative outcomes"
+    - id: decision_rule_missing
+      severity: high
+      category: experiment_design
+      evidence_hint: "No decision rule defined"
+
+weak-experiment-no-sample-size:
+  must_detect:
+    - id: sample_size_missing
+      severity: high
+      category: experiment_design
+      evidence_hint: "No sample size or power analysis"
+    - id: experiment_duration_missing
+      severity: medium
+      category: experiment_design
+      evidence_hint: "No experiment duration specified"
+
+strong-experiment-with-decision-rule:
+  should_not_detect:
+    - id: decision_rule_missing
+      reason: "Clear decision rule is defined"
+    - id: sample_size_missing
+      reason: "Sample size is specified"
+    - id: guardrail_metrics_missing
+      reason: "Guardrail metrics are included"
+
+# Strategy Cases
+weak-strategy-no-segment:
+  must_detect:
+    - id: segment_missing
+      severity: high
+      category: strategy
+      evidence_hint: "No target segment defined"
+
+weak-strategy-no-constraints:
+  must_detect:
+    - id: constraints_missing
+      severity: high
+      category: strategy
+      evidence_hint: "No strategic constraints discussed"
+
+strong-strategy-with-tradeoffs:
+  should_not_detect:
+    - id: tradeoffs_missing
+      reason: "Strategic trade-offs are documented"
+    - id: segment_missing
+      reason: "Target segment is clearly defined"
+    - id: constraints_missing
+      reason: "Constraints are explicitly discussed"

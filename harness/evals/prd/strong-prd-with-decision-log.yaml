@@ -1,0 +1,29 @@
+id: strong-prd-with-decision-log
+artifact_type: PRD
+input_file: examples/eval-cases/prd/strong-prd-with-decision-log.md
+
+expected_score_band: Review-ready
+expected_score_range:
+  min: 85
+  max: 95
+
+expected_findings:
+  should_not_detect:
+    - id: decision_traceability_missing
+      reason: "Comprehensive decision log is present"
+    - id: success_metrics_missing
+      reason: "Primary metric, proxy metrics, and guardrails are defined"
+    - id: tradeoffs_missing
+      reason: "Trade-offs are documented in decision log"
+    - id: rollout_plan_missing
+      reason: "Rollout plan is detailed"
+    - id: unclear_owner
+      reason: "Clear owner and stakeholders are identified"
+    - id: risk_coverage_incomplete
+      reason: "All major risk categories are covered"
+    - id: evidence_missing
+      reason: "Evidence and baseline are provided"
+
+notes: >
+  Tests that Shokunin does not overcriticize a strong PRD.
+  Should have minimal or no findings. Expected score 85-95.

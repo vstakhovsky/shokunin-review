@@ -1,0 +1,26 @@
+id: weak-strategy-no-constraints
+artifact_type: PRODUCT_STRATEGY
+input_file: examples/eval-cases/strategy/weak-strategy-no-constraints.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 50
+  max: 65
+
+expected_findings:
+  must_detect:
+    - id: constraints_missing
+      severity: high
+      category: strategy
+      evidence_hint: "No strategic constraints discussed"
+
+  critical_misses:
+    - constraints_missing
+
+expected_score_caps:
+  - cap: no_tradeoffs_for_rfc_or_strategy
+    max_score: 70
+
+notes: >
+  Tests that Shokunin catches a strategy with no constraint discussion.
+  Expected score 50-65 due to missing strategic context.

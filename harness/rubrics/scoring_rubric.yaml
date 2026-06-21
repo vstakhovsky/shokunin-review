@@ -1,0 +1,232 @@
+# Shokunin Scoring Rubric
+
+# Score bands
+score_bands:
+  review_ready:
+    min: 90
+    max: 100
+    label: "Review-ready"
+  ready_with_minor_fixes:
+    min: 75
+    max: 89
+    label: "Ready with minor fixes"
+  needs_major_fixes:
+    min: 60
+    max: 74
+    label: "Needs major fixes"
+  needs_revision:
+    min: 40
+    max: 59
+    label: "Needs revision"
+  not_review_ready:
+    min: 0
+    max: 39
+    label: "Not review-ready"
+
+# Weighted dimensions for PRD review
+prd_dimensions:
+  problem_clarity:
+    weight: 15
+    description: "Clear problem statement with quantified impact"
+    checks:
+      - quantified_problem
+      - specific_user_segment
+      - pain_point_clear
+      - no_vague_improvements
+
+  evidence_quality:
+    weight: 15
+    description: "Evidence from data, research, or customer feedback"
+    checks:
+      - baseline_specified
+      - data_sources_cited
+      - research_referenced
+      - customer_feedback_included
+
+  target_segment:
+    weight: 10
+    description: "Clear target user segment with demographics"
+    checks:
+      - segment_defined
+      - demographics_included
+      - behavior_patterns_described
+      - market_size_estimated
+
+  mvp_scope:
+    weight: 15
+    description: "Clear MVP boundary with explicit exclusions"
+    checks:
+      - mvp_defined
+      - phase_1_specified
+      - exclusions_listed
+      - out_of_scope_documented
+      - no_scope_creep_indicators
+
+  metrics_quality:
+    weight: 15
+    description: "Primary metric, proxy metrics, and guardrails"
+    checks:
+      - primary_metric_defined
+      - proxy_metrics_included
+      - guardrail_metrics_defined
+      - baseline_specified
+      - target_specified
+      - measurement_feasible
+
+  requirements_clarity:
+    weight: 10
+    description: "Testable requirements with acceptance criteria"
+    checks:
+      - requirements_specific
+      - acceptance_criteria_defined
+      - non_goals_listed
+      - requirements_testable
+
+  technical_feasibility:
+    weight: 10
+    description: "Technical approach with implementation details"
+    checks:
+      - technical_approach_described
+      - dependencies_identified
+      - failure_modes_considered
+      - rollback_plan_defined
+      - api_contract_specified
+      - observability_planned
+
+  risk_coverage:
+    weight: 10
+    description: "Product, business, technical, legal, operational risks"
+    checks:
+      - product_risk_identified
+      - business_risk_identified
+      - technical_risk_identified
+      - legal_compliance_risk_identified
+      - operational_risk_identified
+      - team_resource_risk_identified
+      - mitigation_plans_defined
+
+  decision_readiness:
+    weight: 5
+    description: "Clear decision ask with timeline and decision makers"
+    checks:
+      - decision_ask_clear
+      - timeline_specified
+      - decision_makers_identified
+      - approvers_listed
+
+  tradeoff_quality:
+    weight: 10
+    description: "Explicit trade-offs with alternatives compared"
+    checks:
+      - tradeoffs_documented
+      - alternatives_compared
+      - chosen_option_justified
+      - constraints_explicit
+
+# Score caps - maximum score allowed when critical elements are missing
+score_caps:
+  no_evidence:
+    max_score: 60
+    trigger_tags:
+      - evidence_gap
+      - no_problem_evidence
+    description: "Missing evidence limits score to 60"
+
+  no_primary_metric:
+    max_score: 55
+    trigger_tags:
+      - metric_fog
+      - no-primary-metric
+    description: "Missing primary metric limits score to 55"
+
+  no_mvp_scope:
+    max_score: 55
+    trigger_tags:
+      - mvp_fog
+      - no-mvp-scope
+    description: "Missing MVP scope limits score to 55"
+
+  no_decision_log_for_decision_doc:
+    max_score: 65
+    trigger_tags:
+      - missing-decision
+      - no-decision-ask
+    description: "Missing decision log limits score to 65"
+
+  no_guardrails_for_ai_feature:
+    max_score: 70
+    trigger_tags:
+      - ai-guardrail-gap
+      - no-ai-guardrails
+    description: "Missing AI guardrails limits score to 70"
+
+  no_tradeoffs_for_rfc_or_strategy:
+    max_score: 70
+    trigger_tags:
+      - tradeoffs-missing
+      - alternatives-missing
+    description: "Missing trade-offs for RFC/strategy limits score to 70"
+
+  no_experiment_decision_rule:
+    max_score: 60
+    trigger_tags:
+      - experiment-gap
+      - no-experiment-rule
+    description: "Missing experiment decision rule limits score to 60"
+
+  no_risk_section:
+    max_score: 70
+    trigger_tags:
+      - risk-coverage-incomplete
+      - product-risk-missing
+    description: "Missing risk section limits score to 70"
+
+  critical_placeholders:
+    max_score: 68
+    trigger_tags:
+      - placeholder
+      - tbd
+      - critical-placeholders-present
+    description: "Critical placeholders limit score to 68"
+
+  overclaim:
+    max_score: 60
+    trigger_tags:
+      - overclaim
+      - unsupported-claims
+    description: "Unsupported business impact claims limit score to 60"
+
+  no_simpler_alternative:
+    max_score: 75
+    trigger_tags:
+      - simpler-alternative-gap
+      - no-simpler-alternative
+    description: "Missing simpler alternative analysis limits score to 75"
+
+  no_cost_roi:
+    max_score: 75
+    trigger_tags:
+      - cost-roi-gap
+      - no-cost-model
+    description: "Missing cost/ROI analysis limits score to 75"
+
+  no_privacy_rules:
+    max_score: 75
+    trigger_tags:
+      - privacy-gap
+      - no-personal-data-rules
+    description: "Missing privacy rules for personalization limits score to 75"
+
+# Penalty weights by severity
+penalties:
+  blocker: -12
+  high: -5
+  medium: -2
+  low: -1
+  bloat: -10
+
+# Confidence adjustments
+confidence_adjustments:
+  low: -5
+  medium: -2
+  high: 0

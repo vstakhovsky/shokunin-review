@@ -1,0 +1,26 @@
+id: weak-strategy-no-segment
+artifact_type: PRODUCT_STRATEGY
+input_file: examples/eval-cases/strategy/weak-strategy-no-segment.md
+
+expected_score_band: Needs revision
+expected_score_range:
+  min: 45
+  max: 60
+
+expected_findings:
+  must_detect:
+    - id: segment_missing
+      severity: high
+      category: strategy
+      evidence_hint: "No target segment defined"
+
+  critical_misses:
+    - segment_missing
+
+expected_score_caps:
+  - cap: no_clear_target_segment
+    max_score: 60
+
+notes: >
+  Tests that Shokunin catches a strategy with no target segment.
+  Expected score 45-60 due to missing fundamental strategy element.
