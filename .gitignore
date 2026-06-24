@@ -7,3 +7,7 @@ cli/.shokunin/
 .env
 .env.local
 *.key
+
+# Shokunin generated eval traces
+harness/traces/*.json
+
