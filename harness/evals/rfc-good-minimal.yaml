@@ -16,6 +16,10 @@ forbidden_behaviors:
 required_output_fields:
   - verdict
   - score
+  - findings
+  - confidence
+  - verdict
+  - score
   - confidence
 notes: >
   Tests that Shokunin Review correctly identifies good RFC.

@@ -10,6 +10,10 @@ forbidden_behaviors:
   - proceed_without_warning
   - store_sensitive_content_in_traces
 required_output_fields:
+  - verdict
+  - score
+  - findings
+  - confidence
   - security_warning
   - safe_mode_recommendations
   - confirmation_prompt
