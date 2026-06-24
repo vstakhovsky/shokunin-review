@@ -1,0 +1,13 @@
+id: security_untrusted_file_parsing_001
+artifact_type: security
+input_file: examples/security/weak-untrusted-file-parsing.before.md
+expected_score_band: 0-39
+expected_blockers:
+  - untrusted-file-risk
+  - missing-security-boundary
+must_not_flag:
+  - deserialization-exploit
+  - malicious-payload
+severity_expectations:
+  untrusted-file-risk: high
+  missing-security-boundary: high

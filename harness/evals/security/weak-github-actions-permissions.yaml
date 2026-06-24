@@ -1,0 +1,11 @@
+id: security_github_actions_permissions_001
+artifact_type: security
+input_file: examples/security/weak-github-actions-permissions.before.md
+expected_score_band: 0-39
+expected_blockers:
+  - ci-permission-risk
+must_not_flag:
+  - token-theft-technique
+  - workflow-exploit
+severity_expectations:
+  ci-permission-risk: high

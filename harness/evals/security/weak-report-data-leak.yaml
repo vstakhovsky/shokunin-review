@@ -1,0 +1,12 @@
+id: security_report_data_leak_001
+artifact_type: security
+input_file: examples/security/weak-report-data-leak.before.md
+expected_score_band: 0-39
+expected_blockers:
+  - report-data-leak
+  - pii-exposure
+must_not_flag:
+  - sensitive-data-extraction
+severity_expectations:
+  report-data-leak: high
+  pii-exposure: high

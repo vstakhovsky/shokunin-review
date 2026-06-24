@@ -1,0 +1,14 @@
+id: security_cli_command_injection_001
+artifact_type: security
+input_file: examples/security/weak-cli-command-injection.before.md
+expected_score_band: 0-39
+expected_blockers:
+  - command-injection-risk
+  - unsafe-tool-permission
+  - missing-human-approval
+must_not_flag:
+  - exploit-guidance
+severity_expectations:
+  command-injection-risk: critical
+  unsafe-tool-permission: high
+  missing-human-approval: medium
