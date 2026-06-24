@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as yaml from 'yaml';
 import * as crypto from 'crypto';
-import { EvalConfig, EvalResult, ScoreBand, EvalTrace, RegressionThresholds } from '../types';
+import { EvalConfig, EvalResult, ScoreBand, EvalTrace, RegressionThresholds, EvalMetrics } from '../types';
 import { FileProcessor } from './fileProcessor';
 import { ReviewEngine } from './reviewEngine';
 
@@ -10,24 +10,11 @@ export interface EvalOptions {
   filter?: string;
   verbose?: boolean;
   updateGolden?: boolean;
+  updateBaseline?: boolean;
   strict?: boolean;
   report?: boolean;
   trace?: boolean;
   repeat?: number;
-}
-
-export interface EvalMetrics {
-  critical_recall?: number;
-  finding_recall?: number;
-  hallucination_count?: number;
-  hallucination_rate?: number;
-  score_calibration_error?: number;
-  recommendation_specificity_pass?: boolean;
-  tone_pass?: boolean;
-  required_fields_pass?: boolean;
-  score_caps_pass?: boolean;
-  missed_critical_findings?: string[];
-  hallucinated_findings?: string[];
 }
 
 export class EvalRunner {
@@ -35,6 +22,7 @@ export class EvalRunner {
   private tracesDir: string;
   private reportsDir: string;
   private rubricsDir: string;
+  private regressionDir: string;
 
   constructor() {
     // Determine harness directory location
@@ -60,6 +48,7 @@ export class EvalRunner {
     this.tracesDir = path.join(basePath, 'harness', 'traces');
     this.reportsDir = path.join(basePath, 'harness', 'reports');
     this.rubricsDir = path.join(basePath, 'harness', 'rubrics');
+    this.regressionDir = path.join(basePath, 'harness', 'regression');
   }
 
   /**
@@ -69,6 +58,7 @@ export class EvalRunner {
     const evalConfigs = await this.loadEvalConfigs(options.filter);
     const results: EvalResult[] = [];
     const repeatCount = options.repeat || 1;
+    const mode = options.strict ? 'strict' : 'default';
 
     for (const config of evalConfigs) {
       const caseResults: EvalResult[] = [];
@@ -84,6 +74,16 @@ export class EvalRunner {
       } else {
         results.push(caseResults[0]);
       }
+    }
+
+    // Compare with baseline if not updating
+    if (!options.updateBaseline && results.length > 0) {
+      await this.compareWithBaseline(results, mode);
+    }
+
+    // Update baseline if requested
+    if (options.updateBaseline) {
+      await this.updateBaseline(results, mode);
     }
 
     // Generate report if requested
@@ -406,7 +406,7 @@ export class EvalRunner {
   /**
    * Check recommendation specificity
    */
-  private checkRecommendationSpecificity(findings: any[], expectation: any): boolean {
+  private checkRecommendationSpecificity(findings: any[], _expectation: any): boolean {
     const actionVerbs = ['add', 'define', 'specify', 'include', 'compare', 'quantify', 'split', 'narrow', 'document', 'create', 'set', 'replace', 'remove', 'restructure'];
     const concreteObjects = ['decision log', 'primary metric', 'proxy metric', 'guardrail metric', 'owner', 'rollout plan', 'rollback plan', 'trade-off', 'alternative', 'baseline', 'evidence', 'sample size', 'decision rule', 'risk', 'acceptance criteria', 'target segment', 'constraint', 'dependency', 'api contract'];
 
@@ -536,6 +536,24 @@ export class EvalRunner {
     const missing: string[] = [];
 
     for (const field of requiredFields) {
+      // Special cases for fields that are nested differently
+      if (field === 'confidence' && review.score && review.score.confidence) {
+        continue; // Found in score.confidence
+      }
+      if (field === 'findings' && review.findings) {
+        continue; // Found at top level
+      }
+      if (field === 'verdict' && review.verdict) {
+        continue; // Found at top level
+      }
+      if (field === 'score' && review.score) {
+        continue; // Found at top level
+      }
+      if (field === 'trace' && review.trace) {
+        continue; // Found at top level
+      }
+
+      // Regular nested field check
       const keys = field.split('.');
       let current = review;
 
@@ -727,5 +745,139 @@ export class EvalRunner {
     const content = await fs.readFile(thresholdsPath, 'utf-8');
     const yamlContent = yaml.parse(content);
     return yamlContent[mode] || yamlContent.default;
+  }
+
+  /**
+   * Load baseline data
+   */
+  async loadBaseline(): Promise<any | null> {
+    const baselinePath = path.join(this.regressionDir, 'baseline.json');
+
+    if (!await fs.pathExists(baselinePath)) {
+      return null;
+    }
+
+    try {
+      const content = await fs.readFile(baselinePath, 'utf-8');
+      return JSON.parse(content);
+    } catch (error) {
+      console.warn(`Failed to load baseline: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Update baseline with current results
+   */
+  async updateBaseline(results: EvalResult[], mode: 'default' | 'strict' = 'default'): Promise<void> {
+    await fs.ensureDir(this.regressionDir);
+    const baselinePath = path.join(this.regressionDir, 'baseline.json');
+
+    // Calculate summary metrics
+    const totalCases = results.length;
+    const passedCases = results.filter(r => r.passed).length;
+    const failedCases = totalCases - passedCases;
+
+    const criticalRecall = results.reduce((sum, r) => sum + (r.metrics?.critical_recall ?? 1), 0) / totalCases;
+    const findingRecall = results.reduce((sum, r) => sum + (r.metrics?.finding_recall ?? 1), 0) / totalCases;
+    const hallucinationRate = results.reduce((sum, r) => sum + (r.metrics?.hallucination_rate ?? 0), 0) / totalCases;
+    const avgScoreCalibrationError = results.reduce((sum, r) => sum + (r.metrics?.score_calibration_error ?? 0), 0) / totalCases;
+    const tonePassRate = results.filter(r => r.metrics?.tone_pass).length / totalCases;
+    const recommendationSpecificity = results.filter(r => r.metrics?.recommendation_specificity_pass).length / totalCases;
+
+    const baseline = {
+      version: '1.0.0',
+      generated_at: new Date().toISOString(),
+      mode,
+      thresholds: await this.loadThresholds(mode),
+      summary: {
+        total_cases: totalCases,
+        passed_cases: passedCases,
+        failed_cases: failedCases,
+        critical_recall: criticalRecall,
+        finding_recall: findingRecall,
+        hallucination_rate: hallucinationRate,
+        score_calibration_error: avgScoreCalibrationError,
+        tone_pass_rate: tonePassRate,
+        recommendation_specificity: recommendationSpecificity
+      },
+      results: results.map(r => ({
+        eval_id: r.eval_id,
+        passed: r.passed,
+        actual_score: r.actual_score,
+        expected_band: r.expected_band,
+        actual_band: r.actual_band,
+        metrics: r.metrics
+      }))
+    };
+
+    await fs.writeJSON(baselinePath, baseline, { spaces: 2 });
+    console.log(`Baseline updated: ${baselinePath}`);
+  }
+
+  /**
+   * Compare results with baseline and report regressions
+   */
+  async compareWithBaseline(results: EvalResult[], _mode: 'default' | 'strict' = 'default'): Promise<void> {
+    const baseline = await this.loadBaseline();
+
+    if (!baseline) {
+      console.log('No baseline found. Run with --update-baseline to create one.');
+      return;
+    }
+
+    // Calculate current metrics
+    const totalCases = results.length;
+    const criticalRecall = results.reduce((sum, r) => sum + (r.metrics?.critical_recall ?? 1), 0) / totalCases;
+    const findingRecall = results.reduce((sum, r) => sum + (r.metrics?.finding_recall ?? 1), 0) / totalCases;
+    const hallucinationRate = results.reduce((sum, r) => sum + (r.metrics?.hallucination_rate ?? 0), 0) / totalCases;
+    const avgScoreCalibrationError = results.reduce((sum, r) => sum + (r.metrics?.score_calibration_error ?? 0), 0) / totalCases;
+
+    // Compare with baseline
+    const regressions: string[] = [];
+    const improvements: string[] = [];
+
+    if (criticalRecall < baseline.summary.critical_recall - 0.05) {
+      regressions.push(`Critical recall dropped from ${(baseline.summary.critical_recall * 100).toFixed(1)}% to ${(criticalRecall * 100).toFixed(1)}%`);
+    } else if (criticalRecall > baseline.summary.critical_recall + 0.05) {
+      improvements.push(`Critical recall improved from ${(baseline.summary.critical_recall * 100).toFixed(1)}% to ${(criticalRecall * 100).toFixed(1)}%`);
+    }
+
+    if (findingRecall < baseline.summary.finding_recall - 0.05) {
+      regressions.push(`Finding recall dropped from ${(baseline.summary.finding_recall * 100).toFixed(1)}% to ${(findingRecall * 100).toFixed(1)}%`);
+    } else if (findingRecall > baseline.summary.finding_recall + 0.05) {
+      improvements.push(`Finding recall improved from ${(baseline.summary.finding_recall * 100).toFixed(1)}% to ${(findingRecall * 100).toFixed(1)}%`);
+    }
+
+    if (hallucinationRate > baseline.summary.hallucination_rate + 0.05) {
+      regressions.push(`Hallucination rate increased from ${(baseline.summary.hallucination_rate * 100).toFixed(1)}% to ${(hallucinationRate * 100).toFixed(1)}%`);
+    } else if (hallucinationRate < baseline.summary.hallucination_rate - 0.05) {
+      improvements.push(`Hallucination rate decreased from ${(baseline.summary.hallucination_rate * 100).toFixed(1)}% to ${(hallucinationRate * 100).toFixed(1)}%`);
+    }
+
+    if (avgScoreCalibrationError > baseline.summary.score_calibration_error + 2) {
+      regressions.push(`Score calibration error increased from ${baseline.summary.score_calibration_error.toFixed(1)} to ${avgScoreCalibrationError.toFixed(1)}`);
+    } else if (avgScoreCalibrationError < baseline.summary.score_calibration_error - 2) {
+      improvements.push(`Score calibration error decreased from ${baseline.summary.score_calibration_error.toFixed(1)} to ${avgScoreCalibrationError.toFixed(1)}`);
+    }
+
+    // Print comparison results
+    console.log('\n📊 Baseline Comparison:');
+    console.log(`  Baseline: ${baseline.generated_at}`);
+    console.log(`  Mode: ${baseline.mode}`);
+
+    if (regressions.length > 0) {
+      console.log('\n⚠️  Regressions detected:');
+      regressions.forEach(reg => console.log(`    - ${reg}`));
+    }
+
+    if (improvements.length > 0) {
+      console.log('\n✅ Improvements:');
+      improvements.forEach(imp => console.log(`    - ${imp}`));
+    }
+
+    if (regressions.length === 0 && improvements.length === 0) {
+      console.log('\n✅ No significant changes detected');
+    }
   }
 }

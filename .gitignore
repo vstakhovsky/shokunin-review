@@ -11,3 +11,7 @@ cli/.shokunin/
 # Shokunin generated eval traces
 harness/traces/*.json
 
+
+# Shokunin generated eval reports
+harness/reports/latest*
+

@@ -167,8 +167,9 @@ export class ReviewEngine {
     return dimensions.map(dim => {
       const dimensionFindings = findings.filter(f => f.category === dim.name || f.validator === dim.name);
 
-      // Start with a lower base score - content must earn points
-      let score = 50;
+      // Start with a reasonable base score - content earns points or loses them
+      // Base score of 65 means documents start as "good" and earn bonuses or lose points
+      let score = 65;
 
       // Apply penalties for findings in this dimension
       for (const finding of dimensionFindings) {
@@ -541,6 +542,12 @@ export class ReviewEngine {
 
   /**
    * Determine verdict from score
+   *
+   * Score bands:
+   * 85-100: review_ready
+   * 70-84: nearly_ready / ready_with_minor_fixes
+   * 40-69: needs_major_revision
+   * 0-39: blocked / not_review_ready
    */
   private determineVerdict(score: number): Verdict {
     let band: ScoreBand;
@@ -555,14 +562,10 @@ export class ReviewEngine {
       band = ScoreBand.READY_WITH_MINOR_FIXES;
       emoji = VerdictEmoji.READY_WITH_MINOR_FIXES;
       text = 'Ready with minor fixes';
-    } else if (score >= 55) {
+    } else if (score >= 40) {
       band = ScoreBand.NEEDS_MAJOR_FIXES;
       emoji = VerdictEmoji.NEEDS_MAJOR_FIXES;
       text = 'Needs major fixes';
-    } else if (score >= 35) {
-      band = ScoreBand.NEEDS_REVISION;
-      emoji = VerdictEmoji.NEEDS_REVISION;
-      text = 'Needs revision';
     } else {
       band = ScoreBand.NOT_REVIEW_READY;
       emoji = VerdictEmoji.NOT_REVIEW_READY;

@@ -7,7 +7,8 @@ import {
   EvalResult,
   ScoreBand,
   EvalMetrics,
-  ScoreRange
+  ScoreRange,
+  ArtifactType
 } from '../types';
 
 // Helper function to normalize eval config (mimicking EvalRunner logic)
@@ -23,9 +24,12 @@ function normalizeEvalConfig(config: any): EvalConfig {
     }
   }
 
-  const expected_findings = config.expected_findings || {};
+  let expected_findings = config.expected_findings;
+  if (!expected_findings) {
+    expected_findings = {};
+  }
   if (!expected_findings.must_detect && config.expected_tags) {
-    (expected_findings as any).must_detect = config.expected_tags.map((tag: string) => ({
+    expected_findings.must_detect = config.expected_tags.map((tag: string) => ({
       id: tag,
       severity: 'medium'
     }));
@@ -33,7 +37,8 @@ function normalizeEvalConfig(config: any): EvalConfig {
 
   return {
     ...config,
-    expected_score_range
+    expected_score_range,
+    expected_findings
   };
 }
 
@@ -91,7 +96,7 @@ describe('Eval Schema Compatibility', () => {
   test('should parse old YAML schema with expected_tags', () => {
     const oldConfig = {
       id: 'test-old-schema',
-      artifact_type: 'PRD' as any,
+      artifact_type: ArtifactType.PRD,
       input_file: 'examples/test.md',
       expected_tags: ['metric-fog', 'evidence-gap'],
       expected_score_band: ScoreBand.NOT_REVIEW_READY,
@@ -100,9 +105,9 @@ describe('Eval Schema Compatibility', () => {
 
     const normalized = normalizeEvalConfig(oldConfig);
 
-    expect(normalized.expected_findings.must_detect).toBeDefined();
-    expect(normalized.expected_findings.must_detect).toHaveLength(2);
-    expect(normalized.expected_findings.must_detect![0].id).toBe('metric-fog');
+    expect(normalized.expected_findings?.must_detect).toBeDefined();
+    expect(normalized.expected_findings?.must_detect).toHaveLength(2);
+    expect(normalized.expected_findings?.must_detect![0].id).toBe('metric-fog');
     expect(normalized.expected_score_range).toBeDefined();
     expect(normalized.expected_score_range!.min).toBe(25);
     expect(normalized.expected_score_range!.max).toBe(45);
@@ -111,7 +116,7 @@ describe('Eval Schema Compatibility', () => {
   test('should parse new YAML schema with expected_findings', () => {
     const newConfig = {
       id: 'test-new-schema',
-      artifact_type: 'PRD' as any,
+      artifact_type: ArtifactType.PRD,
       input_file: 'examples/test.md',
       expected_findings: {
         must_detect: [
@@ -125,8 +130,8 @@ describe('Eval Schema Compatibility', () => {
 
     const normalized = normalizeEvalConfig(newConfig);
 
-    expect(normalized.expected_findings.must_detect).toHaveLength(1);
-    expect(normalized.expected_findings.must_detect![0].id).toBe('decision_traceability_missing');
+    expect(normalized.expected_findings?.must_detect).toHaveLength(1);
+    expect(normalized.expected_findings?.must_detect![0].id).toBe('decision_traceability_missing');
     expect(normalized.expected_score_range!.min).toBe(25);
     expect(normalized.expected_score_range!.max).toBe(45);
   });
@@ -134,7 +139,7 @@ describe('Eval Schema Compatibility', () => {
   test('should handle backward compatibility for missing optional fields', () => {
     const minimalConfig = {
       id: 'test-minimal',
-      artifact_type: 'PRD' as any,
+      artifact_type: ArtifactType.PRD,
       input_file: 'examples/test.md',
       expected_score_band: ScoreBand.NOT_REVIEW_READY
     };
@@ -144,6 +149,7 @@ describe('Eval Schema Compatibility', () => {
     expect(normalized.expected_findings).toEqual({});
     expect(normalized.expected_score_range).toBeUndefined();
     expect(normalized.forbidden_behaviors).toBeUndefined();
+    expect(normalized.required_output_fields).toBeUndefined();
   });
 });
 
@@ -225,7 +231,7 @@ describe('Finding Comparison', () => {
 
     const config: EvalConfig = {
       id: 'test',
-      artifact_type: 'PRD',
+      artifact_type: ArtifactType.PRD,
       input_file: 'test.md',
       expected_findings: {
         must_detect: [
@@ -237,7 +243,7 @@ describe('Finding Comparison', () => {
     };
 
     const actualTags = findings.map(f => f.tag || f.id);
-    const allDetected = config.expected_findings.must_detect!.every(f => actualTags.includes(f.id));
+    const allDetected = config.expected_findings?.must_detect?.every(f => actualTags.includes(f.id)) || false;
 
     expect(allDetected).toBe(true);
   });
@@ -249,7 +255,7 @@ describe('Finding Comparison', () => {
 
     const config: EvalConfig = {
       id: 'test',
-      artifact_type: 'PRD',
+      artifact_type: ArtifactType.PRD,
       input_file: 'test.md',
       expected_findings: {
         must_detect: [
@@ -262,7 +268,7 @@ describe('Finding Comparison', () => {
     };
 
     const actualTags = findings.map(f => f.tag || f.id);
-    const missedCritical = config.expected_findings.critical_misses!.filter(id => !actualTags.includes(id));
+    const missedCritical = config.expected_findings?.critical_misses?.filter(id => !actualTags.includes(id)) || [];
 
     expect(missedCritical).toHaveLength(1);
     expect(missedCritical[0]).toBe('decision_traceability_missing');
@@ -276,7 +282,7 @@ describe('Finding Comparison', () => {
 
     const config: EvalConfig = {
       id: 'test',
-      artifact_type: 'PRD',
+      artifact_type: ArtifactType.PRD,
       input_file: 'test.md',
       expected_findings: {
         must_detect: [{ id: 'metric-fog' }],
@@ -288,7 +294,7 @@ describe('Finding Comparison', () => {
     };
 
     const actualTags = findings.map(f => f.tag || f.id);
-    const shouldNotDetect = config.expected_findings.should_not_detect!.map(f => f.id);
+    const shouldNotDetect = config.expected_findings?.should_not_detect?.map(f => f.id) || [];
     const hallucinated = shouldNotDetect.filter(id => actualTags.includes(id));
 
     expect(hallucinated).toHaveLength(1);

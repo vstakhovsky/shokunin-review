@@ -17,6 +17,7 @@ export async function evalCommand(options: any) {
       filter: options.filter,
       verbose: options.verbose,
       updateGolden: options.golden,
+      updateBaseline: options.updateBaseline,
       strict: options.strict,
       report: options.report,
       trace: options.trace !== false,
