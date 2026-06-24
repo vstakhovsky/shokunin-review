@@ -1,0 +1,228 @@
+# Finding Taxonomy
+# Comprehensive taxonomy of finding types with default severity levels
+
+findings:
+  evidence-gap:
+    description: "The artifact makes claims without supporting evidence, data, user research, examples, or references."
+    default_severity: high
+    category: evidence
+
+  missing-decision:
+    description: "The artifact does not clearly state what decision is required, already made, or blocked."
+    default_severity: high
+    category: decision_quality
+
+  missing-primary-metric:
+    description: "The artifact does not define the main success metric."
+    default_severity: high
+    category: metrics
+
+  overclaim:
+    description: "The artifact makes strong claims that are not justified by evidence."
+    default_severity: high
+    category: evidence
+
+  legal-risk:
+    description: "The artifact contains privacy, regulatory, contractual, or legal exposure."
+    default_severity: high
+    category: risk
+
+  missing-architecture:
+    description: "The RFC does not explain the architecture or service boundaries."
+    default_severity: high
+    category: technical_feasibility
+
+  missing-failure-modes:
+    description: "The RFC does not explain expected failure modes or degraded behavior."
+    default_severity: high
+    category: technical_feasibility
+
+  missing-non-functional-requirements:
+    description: "The RFC lacks latency, reliability, scalability, privacy, security, or observability requirements."
+    default_severity: medium
+    category: technical_feasibility
+
+  missing-tradeoffs:
+    description: "The artifact does not explain alternatives, rejected options, or trade-offs."
+    default_severity: medium
+    category: tradeoffs
+
+  missing-hypothesis:
+    description: "The experiment plan does not define a testable hypothesis."
+    default_severity: high
+    category: experiment_design
+
+  missing-guardrail-metric:
+    description: "The experiment plan lacks safety, quality, business, or user-experience guardrail metrics."
+    default_severity: high
+    category: metrics
+
+  missing-sample-size:
+    description: "The experiment plan does not define sample size, power assumptions, or minimum detectable effect."
+    default_severity: medium
+    category: experiment_design
+
+  missing-decision-rule:
+    description: "The experiment plan does not define how the team will decide whether to ship, iterate, or stop."
+    default_severity: high
+    category: experiment_design
+
+  decision_traceability_missing:
+    description: "No decision log, no explicit options, no rejected alternatives."
+    default_severity: high
+    category: decision_quality
+
+  success_metrics_missing:
+    description: "No primary metric, no proxy metrics, no guardrails."
+    default_severity: high
+    category: metrics
+
+  unclear_owner:
+    description: "No accountable product, engineering, data, or ops owner."
+    default_severity: medium
+    category: ownership
+
+  rollout_plan_missing:
+    description: "No rollout or implementation plan."
+    default_severity: medium
+    category: rollout
+
+  proxy_metrics_missing:
+    description: "No proxy metrics defined."
+    default_severity: high
+    category: metrics
+
+  guardrail_metrics_missing:
+    description: "No guardrail metrics for negative outcomes."
+    default_severity: medium
+    category: metrics
+
+  evidence_missing:
+    description: "No baseline data or evidence provided."
+    default_severity: medium
+    category: evidence
+
+  rollout_plan_incomplete:
+    description: "Incomplete rollout details."
+    default_severity: medium
+    category: rollout
+
+  risk_coverage_incomplete:
+    description: "No risk section at all."
+    default_severity: high
+    category: risk
+
+  product_risk_missing:
+    description: "No consideration of adoption risk."
+    default_severity: high
+    category: risk
+
+  technical_risk_missing:
+    description: "No technical feasibility or implementation risks."
+    default_severity: high
+    category: risk
+
+  operational_risk_missing:
+    description: "No operational support or maintenance risks."
+    default_severity: medium
+    category: risk
+
+  alternatives_missing:
+    description: "No alternative approaches considered."
+    default_severity: high
+    category: tradeoffs
+
+  rejected_options_missing:
+    description: "No discussion of why other options were rejected."
+    default_severity: medium
+    category: tradeoffs
+
+  unclear_scope:
+    description: "No MVP boundary or scope definition."
+    default_severity: high
+    category: mvp_scope
+
+  simpler_alternative_gap:
+    description: "No analysis of simpler alternatives."
+    default_severity: medium
+    category: alternatives
+
+  cost_roi_gap:
+    description: "No cost or ROI analysis."
+    default_severity: medium
+    category: cost_analysis
+
+  customer_problem_weak:
+    description: "Customer problem is not clearly stated."
+    default_severity: medium
+    category: problem_definition
+
+  segment_missing:
+    description: "No target segment defined."
+    default_severity: high
+    category: strategy
+
+  constraints_missing:
+    description: "No strategic constraints discussed."
+    default_severity: high
+    category: strategy
+
+  failure_modes_missing:
+    description: "No failure mode analysis."
+    default_severity: high
+    category: technical_feasibility
+
+  rollback_plan_missing:
+    description: "No rollback plan."
+    default_severity: medium
+    category: rollout
+
+  decision_rule_missing:
+    description: "No decision rule defined."
+    default_severity: high
+    category: experiment_design
+
+  experiment_duration_missing:
+    description: "No experiment duration specified."
+    default_severity: medium
+    category: experiment_design
+
+  metric-fog:
+    description: "Metrics are vague or undefined."
+    default_severity: high
+    category: metrics
+
+  mvp-fog:
+    description: "MVP scope is unclear or missing."
+    default_severity: medium
+    category: mvp_scope
+
+  document-bloat:
+    description: "Document is excessively long without adding value."
+    default_severity: low
+    category: quality
+
+  security_vulnerability:
+    description: "Security vulnerabilities present."
+    default_severity: critical
+    category: security
+
+  pii_leakage:
+    description: "PII leakage risks."
+    default_severity: critical
+    category: security
+
+  toxic-language:
+    description: "Toxic or inappropriate language."
+    default_severity: critical
+    category: tone
+
+  accusatory-tone:
+    description: "Accusatory or blaming language."
+    default_severity: high
+    category: tone
+
+  generic-recommendations:
+    description: "Recommendations are too generic to be actionable."
+    default_severity: medium
+    category: actionability

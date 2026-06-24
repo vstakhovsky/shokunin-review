@@ -4,8 +4,8 @@ input_file: examples/eval-cases/prd/polished-bad-prd-ai-slop.md
 
 expected_score_band: Not review-ready
 expected_score_range:
-  min: 25
-  max: 45
+  min: 0
+  max: 39
 
 expected_findings:
   must_detect:

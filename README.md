@@ -166,10 +166,86 @@ shokunin improve <file>             # Suggest improvements
 shokunin rerun <file> --compare <original-file>  # Re-review and compare
 shokunin score <file>               # Show readiness score breakdown
 shokunin eval                       # Run eval harness
+shokunin eval --report              # Generate eval report
+shokunin eval --update-baseline     # Update regression baseline
 shokunin feedback <file>            # Report incorrect review results
 shokunin correct <file>             # Enter interactive correction mode
 shokunin feedback-summary           # Show feedback statistics
 ```
+
+---
+
+## Eval Harness
+
+Shokunin Review includes a real evaluation harness for testing review quality across PRDs, RFCs, and experiment plans.
+
+It validates:
+- Score band accuracy
+- Expected blocker recall
+- False positive control
+- Severity calibration
+- Regression changes
+
+### Running Evals
+
+```bash
+# Run all evals
+shokunin eval
+
+# Generate report
+shokunin eval --report
+
+# Update baseline
+shokunin eval --update-baseline
+```
+
+### Reports
+
+Reports are written to:
+
+```text
+harness/reports/latest.md
+harness/reports/latest.json
+```
+
+### Eval Metrics
+
+- **Critical Recall**: % of critical findings detected
+- **Finding Recall**: % of expected findings detected
+- **Hallucination Rate**: % of false positive findings
+- **Score Calibration Error**: Distance from expected score range
+
+### Documentation
+
+See [Eval Harness Documentation](./docs/eval-harness.md) for complete details on adding eval cases, interpreting reports, and calibration.
+
+---
+
+## Verification Before Commit
+
+Before committing changes to the eval harness, run:
+
+```bash
+bash scripts/verify-eval.sh
+```
+
+A commit is blocked if:
+
+* TypeScript build fails
+* eval unit tests fail
+* real eval harness returns 0 passed cases
+* supported artifacts are marked Unsupported
+* eval reports are not generated
+
+Shokunin Review uses a bounded verification loop:
+
+```text
+Builder → Eval Calibrator → Test Guardian → Judge → PASS / RETRY / BLOCKED
+```
+
+See [Test Guardian documentation](./docs/test-guardian.md) and [Agent Orchestration](./docs/agent-orchestration.md) for details.
+
+---
 
 ### Output modes
 

@@ -2,10 +2,10 @@ id: good-prd-should-not-be-overcriticized
 artifact_type: PRD
 input_file: examples/eval-cases/prd/good-prd-should-not-be-overcriticized.md
 
-expected_score_band: Review-ready
+expected_score_band: Ready with minor fixes
 expected_score_range:
-  min: 80
-  max: 90
+  min: 70
+  max: 84
 
 expected_findings:
   should_not_detect:

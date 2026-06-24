@@ -23,7 +23,8 @@ forbidden_behaviors:
 required_output_fields:
   - verdict
   - score
-  - top_blockers
+  - findings
+  - confidence
 notes: >
   Tests that Shokunin Review catches overclaimed AI features.
   Should flag:

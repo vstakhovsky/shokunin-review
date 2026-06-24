@@ -1,0 +1,123 @@
+# Score Calibration Rubric
+# Defines score bands and dimensions for consistent scoring
+
+score_bands:
+  blocked:
+    range: "0-39"
+    meaning: "Not ready for stakeholder review"
+    description: "Critical gaps present, major revisions required"
+  needs_major_revision:
+    range: "40-69"
+    meaning: "Has serious gaps but can be recovered"
+    description: "Important missing elements, needs substantial work"
+  nearly_ready:
+    range: "70-84"
+    meaning: "Mostly solid, needs minor improvements"
+    description: "Good foundation with minor gaps or refinements needed"
+  ready:
+    range: "85-100"
+    meaning: "Ready for leadership or implementation review"
+    description: "Comprehensive, well-evidenced, ready for next stage"
+
+dimensions:
+  clarity:
+    weight: 15
+    description: "Problem statement, goals, and scope are clear"
+    criteria:
+      - Problem statement is specific and actionable
+      - Success criteria are well-defined
+      - Scope and boundaries are explicit
+      - Non-goals are documented
+
+  evidence:
+    weight: 20
+    description: "Claims are supported by data, research, or examples"
+    criteria:
+      - Data or research supports key claims
+      - Baseline metrics are provided
+      - User research or customer feedback cited
+      - Assumptions are explicitly stated
+
+  decisions:
+    weight: 15
+    description: "Decisions are documented and traceable"
+    criteria:
+      - Decision log is present
+      - Alternatives were considered
+      - Trade-offs are documented
+      - Rejected options are explained
+
+  metrics:
+    weight: 20
+    description: "Success metrics are well-defined"
+    criteria:
+      - Primary metric is clear
+      - Proxy metrics support the primary
+      - Guardrail metrics prevent negative outcomes
+      - Targets and baselines are specified
+
+  risks_and_tradeoffs:
+    weight: 15
+    description: "Risks and trade-offs are addressed"
+    criteria:
+      - Product risks are considered
+      - Technical risks are assessed
+      - Operational risks are documented
+      - Mitigation strategies are proposed
+
+  implementation_readiness:
+    weight: 15
+    description: "Implementation path is feasible"
+    criteria:
+      - Rollout plan is realistic
+      - Dependencies are identified
+      - Resource requirements are clear
+      - Rollback plan is considered
+
+score_caps:
+  no_problem_evidence: 60
+  description: "If no evidence is provided for the problem statement"
+
+  no_primary_metric: 55
+  description: "If no primary success metric is defined"
+
+  no_mvp_scope: 55
+  description: "If no MVP scope or boundary is defined"
+
+  critical_placeholders_present: 68
+  description: "If critical sections contain placeholders like TBD or TODO"
+
+  overclaim_without_evidence: 50
+  description: "If strong claims are made without supporting evidence"
+
+  no_decision_log: 70
+  description: "If no decision log is present for complex decisions"
+
+  no_risk_analysis: 65
+  description: "If no risk analysis is present"
+
+  no_rollback_plan: 75
+  description: "If no rollback plan is provided"
+
+calibration_guidance:
+  scoring_principles:
+    - "Scores reflect readiness for next stage, not document quality"
+    - "Missing critical elements should cap the score"
+    - "Evidence gaps should be penalized heavily"
+    - "Good execution in non-critical areas cannot compensate for missing critical elements"
+    - "Consistency is more important than absolute accuracy"
+
+  common_scoring_issues:
+    - issue: "Over-penalizing minor issues"
+      fix: "Focus on critical gaps, not stylistic preferences"
+    - issue: "Ignoring evidence gaps"
+      fix: "Claims without evidence should be heavily penalized"
+    - issue: "Rewarding length over substance"
+      fix: "Concise, complete documents should score highest"
+    - issue: "Failing good documents for minor missing elements"
+      fix: "Consider scope appropriateness (small features don't need extensive analysis)"
+
+  regression_testing:
+    description: "Use eval harness to detect score drift"
+    threshold: "Average score calibration error should be ≤ 8 points"
+    frequency: "Run full eval suite after any scoring changes"

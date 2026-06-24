@@ -9,6 +9,10 @@ forbidden_behaviors:
   - attempt_review_of_unsupported
   - crash_on_unsupported
 required_output_fields:
+  - verdict
+  - score
+  - findings
+  - confidence
   - unsupported_message
   - supported_formats
   - suggested_action

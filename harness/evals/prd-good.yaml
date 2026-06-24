@@ -14,6 +14,10 @@ forbidden_behaviors:
 required_output_fields:
   - verdict
   - score
+  - findings
+  - confidence
+  - verdict
+  - score
   - confidence
   - findings
   - trace
