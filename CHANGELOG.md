@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 ## Defensive Security Routing
 
 ### What changed
@@ -123,6 +124,8 @@ It creates the foundation for:
 
 Run `scripts/verify-security-routing.sh` to verify the security routing implementation.
 
+=======
+>>>>>>> origin/main
 ## Eval Harness for Review Quality
 
 ### What changed
