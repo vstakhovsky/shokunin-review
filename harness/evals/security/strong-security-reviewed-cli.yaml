@@ -1,0 +1,12 @@
+id: security_strong_cli_001
+artifact_type: security
+input_file: examples/security/strong-security-reviewed-cli.before.md
+expected_score_band: 85-100
+expected_findings:
+  - safe-shell-usage
+  - input-validation
+  - human-approval-gate
+severity_expectations:
+  safe-shell-usage: positive
+  input-validation: positive
+  human-approval-gate: positive

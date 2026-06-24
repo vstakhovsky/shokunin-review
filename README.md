@@ -428,6 +428,36 @@ shokunin review file.md --local-only --no-trace
 - Never invent company metrics, customer data, research, or strategy
 - Never accuse the author of using AI
 
+### Defensive Security Routing
+
+Shokunin Review includes a defensive security routing layer for security-sensitive review tasks.
+
+When reviewing security-related artifacts, the routing layer:
+
+- **Classifies task type** - Identifies whether the task involves secrets, CLI input, CI/CD, prompts, or other security-sensitive areas
+- **Selects defensive reviewer** - Routes to appropriate defensive validator or agent
+- **Enforces safety boundaries** - Ensures output stays within defensive scope only
+- **Requires human approval** - High-risk findings require explicit human approval
+
+**Supported security routes:**
+
+- `secret-leak-review` - Exposed secrets, API keys, tokens, credentials
+- `cli-input-review` - Command injection risks in shell usage
+- `prompt-injection-review` - Untrusted content influencing agent behavior
+- `github-actions-review` - Excessive CI/CD permissions or secret exposure
+- `yaml-eval-review` - Unsafe YAML parsing or code execution
+- `dependency-review` - Supply-chain risk in dependencies
+- `report-sanitization-review` - Sensitive data in generated reports
+- `baseline-poisoning-review` - Eval baseline manipulation risks
+
+**Defensive-only scope:**
+
+✅ **Allowed:** Identify security risks, recommend safe mitigations, suggest secure defaults
+
+❌ **Not allowed:** Provide offensive instructions, demonstrate exploitation techniques, help bypass security controls
+
+For complete documentation, see [docs/security-routing.md](./docs/security-routing.md).
+
 ---
 
 ## AI Code Review with Serge

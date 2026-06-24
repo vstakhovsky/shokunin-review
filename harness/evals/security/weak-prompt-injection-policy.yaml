@@ -1,0 +1,13 @@
+id: security_prompt_injection_001
+artifact_type: security
+input_file: examples/security/weak-prompt-injection-policy.before.md
+expected_score_band: 0-39
+expected_blockers:
+  - prompt-injection-risk
+  - missing-security-boundary
+must_not_flag:
+  - injection-payload
+  - bypass-technique
+severity_expectations:
+  prompt-injection-risk: high
+  missing-security-boundary: high

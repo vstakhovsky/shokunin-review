@@ -1,0 +1,56 @@
+findings:
+  secret-leak:
+    description: "Secrets, API keys, tokens, credentials, or private values may be exposed."
+    default_severity: critical
+
+  prompt-injection-risk:
+    description: "Untrusted content may influence agent behavior or override review instructions."
+    default_severity: high
+
+  unsafe-tool-permission:
+    description: "The agent or script may have excessive tool, filesystem, network, or shell permissions."
+    default_severity: high
+
+  command-injection-risk:
+    description: "User-controlled input may reach shell commands unsafely."
+    default_severity: critical
+
+  path-traversal-risk:
+    description: "User-controlled paths may access files outside the intended workspace."
+    default_severity: high
+
+  untrusted-file-risk:
+    description: "Untrusted files are parsed or executed without validation or sandboxing."
+    default_severity: high
+
+  dependency-risk:
+    description: "Dependencies, scripts, or package metadata introduce supply-chain risk."
+    default_severity: medium
+
+  ci-permission-risk:
+    description: "CI/CD workflow permissions are broader than needed or expose sensitive data."
+    default_severity: high
+
+  pii-exposure:
+    description: "Reports, traces, logs, or examples may expose personal or sensitive data."
+    default_severity: high
+
+  report-data-leak:
+    description: "Generated reports or traces may leak sensitive content and should not be committed."
+    default_severity: high
+
+  baseline-poisoning:
+    description: "A bad eval baseline may be updated after a failed or low-quality run."
+    default_severity: high
+
+  eval-poisoning:
+    description: "Eval cases or expected findings may be manipulated to make weak behavior pass."
+    default_severity: high
+
+  missing-security-boundary:
+    description: "The artifact does not define allowed and disallowed security behavior."
+    default_severity: high
+
+  missing-human-approval:
+    description: "A risky action lacks an explicit human approval gate."
+    default_severity: medium

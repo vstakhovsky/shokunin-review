@@ -148,8 +148,8 @@ export class OverclaimReviewer implements Validator {
   async validate(content: string, _artifactType: ArtifactType): Promise<Finding[]> {
     const findings: Finding[] = [];
 
-    // Check for AI/ML claims without baseline or evidence
-    const hasAIClaims = /ai|machine learning|ml|artificial intelligence|algorithm|model/i.test(content);
+    // Check for AI/ML claims without baseline or evidence - use word boundaries
+    const hasAIClaims = /\bai\b|machine learning|\bml\b|artificial intelligence|\balgorithm\b|\bmodel\b/i.test(content);
     const hasBaseline = /\d+.*%|\d+.*users|\d+.*days|baseline|current/i.test(content);
     const hasEvidence = /evidence|data shows|according to|research|study/i.test(content);
 
@@ -181,8 +181,8 @@ export class AISafetyReviewer implements Validator {
   async validate(content: string, _artifactType: ArtifactType): Promise<Finding[]> {
     const findings: Finding[] = [];
 
-    // Check for AI features
-    const hasAIFeature = /ai|machine learning|ml|algorithm|model|agent|recommendation|personalization|chatgpt|gpt|llm/i.test(content);
+    // Check for AI features - use word boundaries to avoid matching substrings
+    const hasAIFeature = /\bai\b|machine learning|ml\b|agent\b|recommendation engine|personalization|chatgpt|gpt|llm/i.test(content);
 
     // Check for guardrails
     const hasGuardrails = /guardrail|safety|security|limit|boundary|constraint|fallback|rollback|monitor|threshold/i.test(content);
@@ -250,13 +250,13 @@ export class AISafetyReviewer implements Validator {
 
 export class SimplicityReviewer implements Validator {
   name = 'simplicity-reviewer';
-  applicableTypes = [ArtifactType.PRD, ArtifactType.EXPERIMENT_PLAN];
+  applicableTypes = [ArtifactType.PRD, ArtifactType.PRODUCT_STRATEGY];
 
   async validate(content: string, _artifactType: ArtifactType): Promise<Finding[]> {
     const findings: Finding[] = [];
 
-    // Check for consideration of simpler alternatives
-    const hasAIFeature = /ai|machine learning|agent|personalization|recommendation|chatbot|llm|gpt/i.test(content);
+    // Check for consideration of simpler alternatives - use word boundaries
+    const hasAIFeature = /\bai\b|machine learning|agent\b|personalization|recommendation engine|chatbot|llm|gpt/i.test(content);
     const hasAlternativeAnalysis = /alternative|simpler|instead of|could also|consider using|why not|non-ai|baseline|existing/i.test(content);
 
     // Check for comparison against search/filters/carousels
@@ -319,7 +319,7 @@ export class SimplicityReviewer implements Validator {
 
 export class CostROIReviewer implements Validator {
   name = 'cost-roi-reviewer';
-  applicableTypes = [ArtifactType.PRD, ArtifactType.EXPERIMENT_PLAN];
+  applicableTypes = [ArtifactType.PRD, ArtifactType.PRODUCT_STRATEGY];
 
   async validate(content: string, _artifactType: ArtifactType): Promise<Finding[]> {
     const findings: Finding[] = [];
@@ -328,7 +328,7 @@ export class CostROIReviewer implements Validator {
     const hasBusinessClaim = /grow(th|increase|improve|boost|lift|revenue|sales|conversion)/i.test(content);
     const hasCostModel = /cost|roi|margin|uplift|investment|cAC|ltv|payback|budget/i.test(content);
     const hasBaseline = /current|baseline|existing|today|currently|today we/i.test(content);
-    const hasAIFeature = /ai|machine learning|llm|gpt|agent/i.test(content);
+    const hasAIFeature = /\bai\b|machine learning|llm|gpt|\bagent\b/i.test(content);
 
     // Check for AI cost model specifically
     if (hasAIFeature && !/cost per|per.*query|token.*cost|api.*cost|model.*cost/i.test(content)) {
@@ -403,14 +403,28 @@ export class PrivacyReviewer implements Validator {
 
 export class MVPReviewer implements Validator {
   name = 'mvp-reviewer';
-  applicableTypes = [ArtifactType.PRD, ArtifactType.EXPERIMENT_PLAN];
+  applicableTypes = [ArtifactType.PRD];
 
   async validate(content: string, _artifactType: ArtifactType): Promise<Finding[]> {
     const findings: Finding[] = [];
 
+    // Check if this is a simple internal feature that doesn't need MVP scope
+    // Simple internal features: dashboard updates, internal tools, metric additions
+    const isSimpleInternalFeature = /dashboard|internal.*tool|widget.*update|add.*metric.*dashboard|update.*metric.*dashboard/i.test(content);
+
     // Check for MVP scope definition
     const hasMVP = /mvp|minimum viable product|scope|in scope|out of scope|v1|version 1|phase 1/i.test(content);
     const hasScopeBoundary = /will not|out of scope|excluded|later phase|future|not.*included/i.test(content);
+
+    // Check for clear phase structure (Phase 1, Phase 2, Phase 3, etc.)
+    // Match across newlines by replacing newlines temporarily
+    const contentSingleLine = content.replace(/\n/g, ' ');
+    const hasPhaseStructure = /phase 1.*phase 2.*phase 3|phase 1:.*phase 2:.*phase 3:/i.test(contentSingleLine);
+
+    // Skip MVP check for simple internal features
+    if (isSimpleInternalFeature) {
+      return findings;
+    }
 
     if (!hasMVP) {
       findings.push({
@@ -429,7 +443,8 @@ export class MVPReviewer implements Validator {
       });
     }
 
-    if (hasMVP && !hasScopeBoundary) {
+    // Only flag missing scope boundaries if there's no clear phase structure
+    if (hasMVP && !hasScopeBoundary && !hasPhaseStructure) {
       findings.push({
         id: 'mvp-2',
         validator: this.name,

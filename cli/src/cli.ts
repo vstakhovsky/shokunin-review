@@ -69,6 +69,7 @@ program
   .option('--repeat <n>', 'run each eval N times for stability testing', '1')
   .option('--verbose', 'show detailed eval output')
   .option('--golden', 'update golden outputs')
+  .option('--update-baseline', 'update regression baseline with current results')
   .action(evalCommand);
 
 // Feedback command

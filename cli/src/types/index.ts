@@ -162,6 +162,20 @@ export interface EvalConfig {
   notes?: string;
 }
 
+export interface EvalMetrics {
+  critical_recall?: number;
+  finding_recall?: number;
+  hallucination_count?: number;
+  hallucination_rate?: number;
+  score_calibration_error?: number;
+  recommendation_specificity_pass?: boolean;
+  tone_pass?: boolean;
+  required_fields_pass?: boolean;
+  score_caps_pass?: boolean;
+  missed_critical_findings?: string[];
+  hallucinated_findings?: string[];
+}
+
 export interface EvalResult {
   eval_id: string;
   passed: boolean;
@@ -172,18 +186,7 @@ export interface EvalResult {
   forbidden_behaviors: string[];
   missing_fields: string[];
   duration_ms: number;
-  // New metrics
-  metrics?: {
-    critical_recall?: number;
-    finding_recall?: number;
-    hallucination_count?: number;
-    hallucination_rate?: number;
-    score_calibration_error?: number;
-    recommendation_specificity_pass?: boolean;
-    tone_pass?: boolean;
-    required_fields_pass?: boolean;
-    score_caps_pass?: boolean;
-  };
+  metrics?: EvalMetrics;
   missed_critical_findings?: string[];
   hallucinated_findings?: string[];
   score_calibration_label?: 'too_strict' | 'too_lenient' | 'calibrated';

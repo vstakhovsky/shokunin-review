@@ -426,6 +426,66 @@ If you find a security issue:
 
 ---
 
+## Defensive Security Routing
+
+Shokunin Review includes a defensive security routing layer for security-sensitive review tasks.
+
+### What it does
+
+When reviewing security-related artifacts, the routing layer:
+
+1. **Classifies task type** - Identifies whether the task involves secrets, CLI input, CI/CD, prompts, or other security-sensitive areas
+2. **Selects defensive reviewer** - Routes to appropriate defensive validator or agent
+3. **Enforces safety boundaries** - Ensures output stays within defensive scope only
+4. **Requires human approval** - High-risk findings require explicit human approval
+
+### Supported security routes
+
+- `secret-leak-review` - Exposed secrets, API keys, tokens, credentials
+- `cli-input-review` - Command injection risks in shell usage
+- `prompt-injection-review` - Untrusted content influencing agent behavior
+- `github-actions-review` - Excessive CI/CD permissions or secret exposure
+- `yaml-eval-review` - Unsafe YAML parsing or code execution
+- `dependency-review` - Supply-chain risk in dependencies
+- `report-sanitization-review` - Sensitive data in generated reports
+- `baseline-poisoning-review` - Eval baseline manipulation risks
+
+### Defensive-only scope
+
+Shokunin Review is **defensive only**:
+
+✅ **Allowed:**
+- Identify security risks
+- Recommend safe mitigations
+- Suggest secure defaults
+- Recommend hardening practices
+
+❌ **Not allowed:**
+- Provide offensive instructions
+- Demonstrate exploitation techniques
+- Help bypass security controls
+- Provide exploit chains
+
+### Safety enforcement
+
+All security routes must:
+- Read `skills/security-routing.md` before handling security tasks
+- Stay within defensive boundaries defined in `skills/security/BOUNDARIES.md`
+- Route unsafe requests to `unsafe-security-request` (refusal only)
+- Escalate unclear cases to human review
+
+### Human approval required
+
+Human approval is required for:
+- Command injection findings (credential risk)
+- Secret exposure findings (credential exposure)
+- Baseline poisoning findings (eval integrity)
+- Any request approaching offensive boundaries
+
+### Documentation
+
+See `docs/security-routing.md` for complete documentation on defensive security routing.
+
 ## Security FAQ
 
 ### Is Shokunin Review safe for confidential documents?
@@ -447,6 +507,10 @@ Delete trace files (if any). Review your local configuration. If using cloud mod
 ### Is Shokunin Review compliant with GDPR/SOC2/etc?
 
 MVP 1 has no telemetry, no storage, and no data collection. Compliance depends on your setup and model provider.
+
+### Does Shokunin Review provide offensive security guidance?
+
+No. Shokunin Review is defensive-only. It identifies security risks and recommends safe mitigations, but never provides exploit development, bypass techniques, or offensive instructions.
 
 ---
 

@@ -1,4 +1,131 @@
 
+<<<<<<< HEAD
+## Defensive Security Routing
+
+### What changed
+
+Shokunin Review now includes a defensive security routing layer for security-sensitive review tasks.
+
+The routing layer classifies security tasks and routes them to the appropriate defensive validator or agent before producing findings.
+
+### Problem solved
+
+Before this update, security-sensitive review tasks could be handled inconsistently or potentially produce unsafe guidance.
+
+The new routing layer ensures that all security tasks are:
+- Properly classified before handling
+- Routed to appropriate defensive workflows
+- Kept within defensive-only boundaries
+- Reviewed for human approval when needed
+
+### Why this matters
+
+AI-powered code review can encounter security-sensitive content that requires special handling.
+
+The defensive security routing helps prevent:
+- Unsafe agent behavior
+- Prompt injection risks
+- Accidental secret leakage
+- Unsafe shell execution
+- Baseline poisoning
+- Report and trace data leaks
+- False confidence in AI-generated security reviews
+
+### Main scenarios
+
+Use defensive security routing when:
+- Reviewing CLI tools for command injection risks
+- Checking for exposed secrets or credentials
+- Analyzing GitHub Actions for excessive permissions
+- Reviewing prompt handling for injection risks
+- Evaluating YAML parsing for unsafe evaluation
+- Checking generated reports for sensitive data
+- Reviewing eval baselines for poisoning risks
+
+### Architecture fit
+
+The routing layer sits between the review request and the security reviewer agents.
+
+Flow:
+```text
+security task
+  -> security-router (classify task)
+  -> routing table (select route)
+  -> security-reviewer (defensive review)
+  -> safety-judge (boundary check)
+  -> findings or BLOCKED
+```
+
+New security routes:
+
+- `secret-leak-review` - Exposed secrets, API keys, tokens, credentials
+- `cli-input-review` - Command injection risks in shell usage
+- `prompt-injection-review` - Untrusted content influencing agent behavior
+- `github-actions-review` - Excessive CI/CD permissions or secret exposure
+- `yaml-eval-review` - Unsafe YAML parsing or code execution
+- `dependency-review` - Supply-chain risk in dependencies
+- `report-sanitization-review` - Sensitive data in generated reports
+- `baseline-poisoning-review` - Eval baseline manipulation risks
+
+### Defensive-only scope
+
+Shokunin Review is defensive-only:
+
+✅ **Allowed:** Identify security risks, recommend safe mitigations, suggest secure defaults
+
+❌ **Not allowed:** Provide offensive instructions, demonstrate exploitation techniques, help bypass security controls
+
+### New files and areas
+
+This update adds:
+
+```
+skills/security-routing.md
+skills/security/BOUNDARIES.md
+harness/expected_findings/security-taxonomy.yaml
+harness/evals/security/
+examples/security/
+.claude/agents/shokunin-security-router.md
+.claude/agents/shokunin-security-reviewer.md
+.claude/agents/shokunin-safety-judge.md
+scripts/verify-security-routing.sh
+docs/security-routing.md
+```
+
+### New security agents
+
+- `shokunin-security-router` - Classifies security tasks and selects routes
+- `shokunin-security-reviewer` - Finds defensive security risks in artifacts
+- `shokunin-safety-judge` - Ensures output stays within defensive boundaries
+
+### New eval cases
+
+Security eval cases test the routing layer:
+
+- `weak-cli-command-injection` - Command injection risks
+- `weak-report-data-leak` - Sensitive data in reports
+- `weak-prompt-injection-policy` - Prompt injection risks
+- `weak-github-actions-permissions` - Excessive CI permissions
+- `weak-untrusted-file-parsing` - Unsafe YAML parsing
+- `strong-security-reviewed-cli` - Positive security example
+
+### Product impact
+
+This update improves Shokunin Review from a general document reviewer into a security-aware review system with proper defensive boundaries.
+
+It creates the foundation for:
+- Safer security review workflows
+- Proper handling of security-sensitive content
+- Prevention of unsafe guidance
+- Better integration with eval harness and Test Guardian
+- Clear separation of defensive vs offensive security
+
+### Verification
+
+Run `scripts/verify-security-routing.sh` to verify the security routing implementation.
+
+=======
+>>>>>>> origin/main
 ## Eval Harness for Review Quality
 
 ### What changed
