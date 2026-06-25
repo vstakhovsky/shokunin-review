@@ -62,6 +62,34 @@ Shokunin Review catches those gaps before the document reaches a human reviewer.
 
 ---
 
+## Product Architecture Direction
+
+Shokunin Review is designed to be more than an AI PM assistant.
+
+The target architecture combines:
+
+```text
+Skills
+  -> Evals
+  -> Review loops
+  -> Decision Log
+  -> Trace Review
+  -> Human Gate
+  -> Future MCP integrations
+```
+
+This means Shokunin Review should not only produce recommendations. It should help validate them, explain them, track human decisions, and prevent false confidence.
+
+See [Product Architecture Roadmap](./docs/product-architecture-roadmap.md) for details on:
+
+- Skills, Evals, and Review loops
+- Decision Log for tracking recommendations
+- Trace Review for explaining findings
+- Human Gate for final decision ownership
+- MCP integrations roadmap
+
+---
+
 ## Quick Start
 
 ```bash
