@@ -249,6 +249,51 @@ See [Eval Harness Documentation](./docs/eval-harness.md) for complete details on
 
 ---
 
+## Eval Operating System
+
+Shokunin Review treats evals as an evolving quality system, not only as tests.
+
+The target loop is:
+
+```text
+run evals
+→ inspect failures
+→ cluster recurring error patterns
+→ update validators and rubrics
+→ mine few-shot examples
+→ rerun regression
+→ publish trust report
+```
+
+This helps prevent false confidence from AI-generated reviews and makes quality improvements measurable.
+
+### What's included
+
+- **Error taxonomy:** Classify failure types (missed blockers, false positives, miscalibrated severity)
+- **Quality rubrics:** Finding quality and review quality criteria
+- **Error analysis loop:** Systematic process for analyzing and fixing failures
+- **Synthetic evals:** Test edge cases before real-world failures
+- **Few-shot mining:** Turn failures into examples for improvement
+
+### Current status
+
+**Implemented:**
+- Error taxonomy and quality rubrics
+- Error analysis documentation and initial script
+- Synthetic and few-shot roadmap structure
+
+**Roadmap:**
+- Automated trace clustering
+- Few-shot mining automation
+- Synthetic eval generation
+- Stakeholder trust reports
+
+### Documentation
+
+See [Eval Operating System](./docs/eval-operating-system.md) for the complete framework.
+
+---
+
 ## Verification Before Commit
 
 Before committing changes to the eval harness, run:

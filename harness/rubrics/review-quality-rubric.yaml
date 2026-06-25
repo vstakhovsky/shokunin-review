@@ -1,0 +1,88 @@
+rubric_id: review_quality_v1
+description: Evaluates the overall quality of a Shokunin review.
+
+criteria:
+  critical_recall:
+    weight: 25
+    description: Detects critical blockers that should prevent readiness.
+    pass_examples:
+      - "Review correctly identifies missing primary metric as critical blocker."
+      - "Review flags undefined MVP scope as critical blocker."
+    fail_examples:
+      - "Review gives high score despite missing primary metric."
+      - "Review misses critical evidence gap."
+
+  finding_recall:
+    weight: 20
+    description: Detects expected findings for the artifact type.
+    pass_examples:
+      - "Review detects all expected findings: missing baseline, vague requirements, no alternatives."
+      - "Review catches metric fog and requirement fog in PRD."
+    fail_examples:
+      - "Review only detects 1 of 5 expected findings."
+      - "Review misses clear technical handwaving in RFC."
+
+  false_positive_control:
+    weight: 15
+    description: Avoids flagging issues that should not be flagged.
+    pass_examples:
+      - "Review does not flag well-defined metrics as 'metric fog'."
+      - "Review accepts clear decision rationale without demanding more detail."
+    fail_examples:
+      - "Review flags valid success metric as 'overclaim'."
+      - "Review criticizes clear technical approach as 'handwaving'."
+
+  score_calibration:
+    weight: 15
+    description: Final readiness score matches expected score band.
+    pass_examples:
+      - "PRD with missing evidence and metrics scores 35/100 (not review-ready)."
+      - "Complete RFC with trade-offs scores 88/100 (review-ready)."
+    fail_examples:
+      - "Weak PRD scores 85/100 despite missing blockers."
+      - "Strong RFC scores 45/100 without clear justification."
+
+  evidence_grounding:
+    weight: 15
+    description: Review output is grounded in artifact content.
+    pass_examples:
+      - "All findings include page/section references and quotes."
+      - "Review uses exact artifact language in evidence quotes."
+    fail_examples:
+      - "Findings claim document 'mentions X' without quotes."
+      - "Review invents claims about what document 'should have' without referencing actual content."
+
+  actionability:
+    weight: 10
+    description: Recommendations are practical and specific.
+    pass_examples:
+      - "Review suggests adding specific baseline metric (e.g., churn rate)."
+      - "Review recommends clear next steps with ownership."
+    fail_examples:
+      - "Review suggests generic 'improve metrics' without specifics."
+      - "Recommendations are too vague to act on."
+
+score_bands:
+  strong: 80-100
+  acceptable: 60-79
+  weak: 40-59
+  unusable: 0-39
+
+scoring_notes:
+  - "Strong reviews detect critical blockers, expected findings, avoid false positives, and calibrate scores correctly."
+  - "Acceptable reviews may miss some non-critical findings or have minor score calibration issues."
+  - "Weak reviews miss critical blockers, have high false positive rates, or poorly calibrated scores."
+  - "Unusable reviews invent findings, are ungrounded, or give misleading scores."
+
+usage_notes:
+  - "Use this rubric to evaluate overall review quality in eval cases."
+  - "Use this rubric to compare different reviewer configurations or prompts."
+  - "Use this rubric to gate validator changes before deployment."
+
+dimension_weights_explanation:
+  - "Critical recall (25%) - Missing critical blockers is the worst failure mode."
+  - "Finding recall (20%) - Comprehensive coverage ensures no gap is missed."
+  - "False positive control (15%) - Prevents trust erosion from bad findings."
+  - "Score calibration (15%) - Scores drive decisions, must be accurate."
+  - "Evidence grounding (15%) - Ungrounded reviews are not verifiable."
+  - "Actionability (10%) - Recommendations must be useful to be worth reading."

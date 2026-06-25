@@ -1,0 +1,72 @@
+rubric_id: finding_quality_v1
+description: Evaluates whether a Shokunin finding is useful, grounded, and actionable.
+
+criteria:
+  evidence_grounding:
+    weight: 25
+    description: Finding includes evidence from the reviewed artifact.
+    pass_examples:
+      - "The PRD mentions growth but does not define a primary success metric (page 3)."
+      - "Section 4 claims 'significant user demand' without providing baseline data or customer quotes."
+    fail_examples:
+      - "The document needs better metrics."
+      -Missing evidence for claims."
+      - "Problem statement is weak."
+
+  severity_calibration:
+    weight: 20
+    description: Severity matches the expected business/product risk.
+    pass_examples:
+      - "Critical: No MVP scope defined - cannot evaluate feasibility."
+      - "Medium: Success metric defined but target unclear."
+    fail_examples:
+      - "Critical: Typo in executive summary."
+      - "Low: Missing primary success metric."
+
+  recommendation_specificity:
+    weight: 20
+    description: Recommendation is specific enough for a PM or team lead to act on.
+    pass_examples:
+      - "Add baseline churn rate (e.g., 5% over 90 days) or customer support tickets per user."
+      - "Define MVP scope explicitly with included/excluded features in a dedicated section."
+    fail_examples:
+      - "Improve metrics."
+      - "Add more details."
+      - "Consider A/B testing."
+
+  non_hallucination:
+    weight: 20
+    description: Finding does not invent facts, competitors, users, metrics, or implementation details.
+    pass_examples:
+      - "The document mentions 'AI-powered ordering' but does not define what AI techniques will be used."
+      - "Claims to beat competitors but does not name which competitors or on what dimensions."
+    fail_examples:
+      - "The document claims to use GPT-4 but never mentions it." (if GPT-4 is not mentioned)
+      - "Users will hate this feature based on the survey data." (if no survey exists)
+
+  owner_and_next_step:
+    weight: 15
+    description: Finding indicates who should act and what should happen next.
+    pass_examples:
+      - "Owner: PM. Add baseline problem quantification to validate opportunity size."
+      - "Owner: Tech Lead. Specify failure modes and rollback plan for the proposed architecture."
+    fail_examples:
+      - "This needs more work."
+      - "Someone should fix this."
+
+score_bands:
+  strong: 80-100
+  acceptable: 60-79
+  weak: 40-59
+  unusable: 0-39
+
+scoring_notes:
+  - "Strong findings are grounded, specific, severity-calibrated, and actionable."
+  - "Acceptable findings may have minor gaps in specificity or evidence."
+  - "Weak findings are vague, unsupported, or miscalibrated."
+  - "Unusable findings are invented, toxic, or completely unactionable."
+
+usage_notes:
+  - "Use this rubric to audit existing findings in eval cases."
+  - "Use this rubric to train validator prompts on what constitutes a good finding."
+  - "Use this rubric to judge whether automated review outputs meet quality standards."

@@ -1,0 +1,122 @@
+taxonomy_id: shokunin_error_taxonomy_v1
+description: Error types used to analyze failed eval runs.
+
+error_types:
+  missed_blocker:
+    description: Validator failed to detect a required critical blocker.
+    severity: critical
+    impact: "Document may pass review when it should not. Can lead to bad decisions."
+    example: "PRD missing primary metric but reviewer scores it 75/100."
+
+  missed_expected_finding:
+    description: Validator missed an expected finding.
+    severity: high
+    impact: "Incomplete review coverage. Gaps remain undetected."
+    example: "RFC missing rollback plan but reviewer does not flag it."
+
+  false_positive:
+    description: Validator flagged something that should not be flagged.
+    severity: high
+    impact: "Erodes trust. Wastes reviewer time on non-issues."
+    example: "Valid success metric flagged as 'metric fog'."
+
+  wrong_severity:
+    description: Finding exists but severity is miscalibrated.
+    severity: medium
+    impact: "Misleads prioritization. Low-severity issues may block readiness."
+    example: "Typo flagged as critical blocker."
+
+  vague_recommendation:
+    description: Recommendation is too generic to be actionable.
+    severity: medium
+    impact: "Author cannot act on feedback. Review adds noise not signal."
+    example: "Recommendation says 'improve metrics' without specifics."
+
+  unsupported_claim:
+    description: Review invented facts not grounded in the artifact.
+    severity: high
+    impact: "Hallucination. Undermines trust in all findings."
+    example: "Review claims document mentions X when it does not."
+
+  score_band_mismatch:
+    description: Final readiness score does not match expected band.
+    severity: high
+    impact: "Wrong go/no-go decision. Can block good work or pass bad work."
+    example: "Strong document scores 35/100. Weak document scores 85/100."
+
+  missing_evidence_quote:
+    description: Finding lacks artifact-grounded evidence.
+    severity: high
+    impact: "Finding cannot be verified. Appears invented or weak."
+    example: "Finding claims 'metric fog' without quoting problematic metric."
+
+  duplicate_finding:
+    description: Same issue is reported multiple times without adding value.
+    severity: low
+    impact: "Review bloat. Confuses prioritization."
+    example: "Missing metric reported as 'evidence-gap', 'metric-fog', and 'overclaim'."
+
+  must_not_flag_violation:
+    description: Review flagged a finding explicitly listed under must_not_flag rules.
+    severity: high
+    impact: "False positive on known-good pattern. Indicates validation bug."
+    example: "Review flags well-defined metric as missing despite passing validation."
+
+  toxic_or_dismissive_tone:
+    description: Review uses inappropriate tone or language.
+    severity: medium
+    impact: "Damages collaboration. Discourages use of system."
+    example: "Finding says 'This is lazy work' or 'Who wrote this garbage'."
+
+  hallucinated_gap:
+    description: Review claims something is missing when it exists in the artifact.
+    severity: high
+    impact: "False positive. Undermines trust. Wastes author's time."
+    example: "Review claims 'no alternatives' when section 5 explicitly discusses three options."
+
+  missing_recommended_action:
+    description: Finding is identified but no recommended action is provided.
+    severity: low
+    impact: "Author knows what's wrong but not how to fix it."
+    example: "Finding flags 'missing baseline' but doesn't say what baseline to add."
+
+  generic_recommendation:
+    description: Recommendation is a generic template without artifact-specific guidance.
+    severity: medium
+    impact: "Review feels robotic. Not actually helpful."
+    example: "Recommendation is 'Add success metrics' without suggesting what metrics."
+
+  document_bloat:
+    description: Review output is excessively long for the value provided.
+    severity: low
+    impact: "Review becomes TL;DR. Key findings get buried."
+    example: "50 findings for a 2-page document. Most are minor style issues."
+
+usage_notes:
+  - "Use this taxonomy to classify failed eval cases."
+  - "Group failures by error_type to identify patterns."
+  - "Prioritize fixes by severity: critical > high > medium > low."
+  - "Track error_type frequency to measure improvement over time."
+
+clustering_guidance:
+  - "Group all missed_blocker failures to identify validator gaps."
+  - "Group all false_positive failures to refine validation logic."
+  - "Group all unsupported_claim failures to improve grounding."
+  - "Group all score_band_mismatch failures to recalibrate scoring."
+
+next_actions:
+  missed_blocker: "Update validator to detect missing blocker or adjust severity."
+  missed_expected_finding: "Add validator rule or improve existing rule sensitivity."
+  false_positive: "Refine validator threshold or add must_not_flag exception."
+  wrong_severity: "Calibrate severity scoring logic against expected risk."
+  vague_recommendation: "Improve prompt templates to require specificity."
+  unsupported_claim: "Add evidence requirement to validator prompts."
+  score_band_mismatch: "Adjust score cap logic or weight calculations."
+  missing_evidence_quote: "Require evidence quotes in all finding templates."
+  duplicate_finding: "Add deduplication logic to reviewer output."
+  must_not_flag_violation: "Fix validator bug or adjust must_not_flag rules."
+  toxic_or_dismissive_tone: "Add tone guard to output generation."
+  hallucinated_gap: "Improve artifact parsing and validator accuracy."
+  missing_recommended_action: "Require actionability in finding templates."
+  generic_recommendation: "Customize recommendations to artifact context."
+  document_bloat: "Add finding relevance filtering and ranking."
