@@ -32,6 +32,49 @@ See [Product Architecture Roadmap](./docs/product-architecture-roadmap.md) for c
 
 ---
 
+<<<<<<< HEAD
+## Eval Operating System Roadmap
+
+Shokunin Review includes an Eval Operating System for continuous quality improvement.
+
+### Current Status
+
+**Implemented (MVP documentation / initial implementation):**
+- Finding quality rubric (`harness/rubrics/finding-quality-rubric.yaml`)
+- Review quality rubric (`harness/rubrics/review-quality-rubric.yaml`)
+- Error taxonomy (`harness/error_analysis/error_taxonomy.yaml`)
+- Error analysis loop documentation (`docs/error-analysis-loop.md`)
+- Initial error analysis script (`scripts/analyze-eval-errors.sh`)
+- Synthetic and few-shot roadmap folders (`harness/synthetic/`, `harness/few_shot/`)
+
+**Partially implemented:**
+- Expected findings (exists in eval cases, needs consistency improvements)
+- Regression testing (basic structure exists, needs stronger governance)
+
+**Roadmap:**
+- Trace clustering automation
+- Few-shot mining automation
+- Synthetic eval generation
+- Eval trust reports
+- Automated rubric updates based on error patterns
+
+### Next evaluation improvements
+
+The Eval Operating System is evolving in phases:
+
+1. **Error classification** — Systematically categorize eval failures
+2. **Pattern clustering** — Group repeated failure types
+3. **Validator improvement** — Update prompts and logic based on findings
+4. **Synthetic generation** — Generate test cases from rubrics
+5. **Few-shot mining** — Extract examples from failures for training
+6. **Trust reporting** — Generate stakeholder-facing quality reports
+
+See [Eval Operating System](./docs/eval-operating-system.md) for complete details.
+
+---
+
+=======
+>>>>>>> origin/main
 ## MVP 1 — Review Readiness Foundation
 
 **Status**: ✅ In Development
