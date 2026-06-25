@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Meta Agents: Documentation Curator, Release Manager, and Competitive Analyst
 
 ### What changed
@@ -196,6 +197,8 @@ It creates the foundation for:
 - Easier stakeholder understanding
 - Better hiring and candidate evaluation
 
+=======
+>>>>>>> origin/main
 ## Defensive Security Routing
 
 ### What changed
