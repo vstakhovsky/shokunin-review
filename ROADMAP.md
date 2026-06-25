@@ -10,6 +10,28 @@ Shokunin Review is developed in phases (MVP 1-5), each adding specific capabilit
 
 ---
 
+## Product Architecture Roadmap
+
+Shokunin Review is moving toward a validation harness architecture:
+
+- **Skills** — `/prd-review`, `/rfc-review`, `/experiment-review`, `/strategy-review`
+- **Evals** — weak/strong cases, missing metrics, missing trade-offs, overclaiming, security gaps
+- **Loops** — review → fix → re-review → readiness score delta
+- **MCP integrations** — GitHub, Notion/Obsidian, Google Drive, Linear/Jira (Roadmap)
+- **Decision Log** — accepted / rejected / deferred recommendations (Roadmap)
+- **Trace Review** — explain why a finding was produced (Partially implemented)
+- **Human Gate** — PM / team lead remains final decision owner (Documented)
+
+**Current maturity:**
+
+- ✅ Implemented: Skills, Evals, Security routing, Verification loop
+- 🔄 WIP: Eval calibration, Trace/reports generation
+- 📋 Roadmap: MCP integrations, Decision Log, Trace Review UX, Human Gate workflow
+
+See [Product Architecture Roadmap](./docs/product-architecture-roadmap.md) for complete details.
+
+---
+
 ## MVP 1 — Review Readiness Foundation
 
 **Status**: ✅ In Development

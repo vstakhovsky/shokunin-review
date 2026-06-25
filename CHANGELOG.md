@@ -1,6 +1,98 @@
 
 <<<<<<< HEAD
+## Product Architecture Roadmap
+
+### What changed
+
+Added documentation for the next stage of Shokunin Review architecture: skills, evals, review loops, MCP roadmap, decision logs, trace review, and human gates.
+
+### Why this matters
+
+This clarifies that Shokunin Review is not a generic AI assistant. It is becoming a validation harness for product and technical artifacts, with explicit review loops, traceability, and human decision gates.
+
+### Current status
+
+Some parts already exist, such as eval harness, security routing, verification scripts, and agent workflows.
+
+Other parts, such as MCP integrations, decision logs, trace review UX, and full human approval flow, are roadmap items.
+
+### New documentation
+
+This update adds:
+
+```
+docs/product-architecture-roadmap.md
+docs/decision-log.md
+docs/trace-review.md
+docs/human-gate.md
+docs/integrations-roadmap.md
+scripts/verify-product-architecture-roadmap.sh
+```
+
+### Updated documentation
+
+This update updates:
+
+```
+README.md - Added Product Architecture Direction section
+ROADMAP.md - Added Product Architecture Roadmap section
+CHANGELOG.md - This entry
+```
+
+### Architecture components
+
+**Implemented:**
+- Skills (PRD, RFC, Experiment, Strategy review)
+- Evals (weak/strong cases, regression testing)
+- Security routing layer
+- Verification loop and multi-agent orchestration
+
+**Partially implemented:**
+- Trace/reports generation
+- Review delta reporting
+
+**Roadmap:**
+- MCP integrations (GitHub, Notion/Obsidian, Google Drive, Linear/Jira)
+- Decision log schema and persistence
+- Human-readable trace review UX
+- Full human gate workflow
+
+### Key principles
+
+The product architecture documentation emphasizes:
+
+1. **AI recommends, humans decide** - Final authority always with humans
+2. **Transparency** - Trace review explains why findings were produced
+3. **Accountability** - Decision log tracks accepted/rejected/deferred recommendations
+4. **Validation over generation** - Focus on reviewing, not rewriting
+5. **No overclaiming** - Clear distinction between implemented and roadmap features
+
+### Verification
+
+Run `scripts/verify-product-architecture-roadmap.sh` to verify the product architecture documentation implementation.
+
+### Product impact
+
+This update improves Shokunin Review from a simple review tool to a comprehensive validation harness with:
+
+- Clear architecture direction
+- Documented human decision gates
+- Traceability and accountability
+- Roadmap for integrations
+- Transparency into AI reasoning
+
+It creates the foundation for:
+- Better product positioning
+- Clearer differentiation from generic AI assistants
+- Structured approach to future features
+- Maintainable architecture as the system grows
+
+---
+
+=======
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/main
 ## Meta Agents: Documentation Curator, Release Manager, and Competitive Analyst
 
 ### What changed
@@ -197,7 +289,12 @@ It creates the foundation for:
 - Easier stakeholder understanding
 - Better hiring and candidate evaluation
 
+<<<<<<< HEAD
+---
+
 =======
+=======
+>>>>>>> origin/main
 >>>>>>> origin/main
 ## Defensive Security Routing
 
