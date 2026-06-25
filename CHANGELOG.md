@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 ## Product Architecture Roadmap
 
 ### What changed
@@ -88,6 +89,10 @@ It creates the foundation for:
 
 ---
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/main
 ## Meta Agents: Documentation Curator, Release Manager, and Competitive Analyst
 
 ### What changed
@@ -284,8 +289,13 @@ It creates the foundation for:
 - Easier stakeholder understanding
 - Better hiring and candidate evaluation
 
+<<<<<<< HEAD
 ---
 
+=======
+=======
+>>>>>>> origin/main
+>>>>>>> origin/main
 ## Defensive Security Routing
 
 ### What changed
