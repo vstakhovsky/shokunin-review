@@ -72,6 +72,6 @@ assistant: I've reset your password. Your new temporary password is TempPass123!
 
 ## Report Metadata
 
-- **Reviewer API Token:** `ghp_token1234567890abcdef`
+- **Reviewer API Token:** `GITHUB_TOKEN_PLACEHOLDER_DO_NOT_USE`
 - **Database Connection String:** `postgresql://admin:SuperSecret123!@db.example.com:5432/prod`
 - **AWS Secret Key:** `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`

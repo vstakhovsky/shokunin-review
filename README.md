@@ -482,6 +482,43 @@ Serge is not a complete security scanner. Use it together with tests, TypeScript
 
 ---
 
+## Onboarding Agents
+
+Shokunin Review includes two repository-aware onboarding agents for faster contributor onboarding:
+
+- **Shokunin Product Manager** — explains product features, user scenarios, roadmap, positioning, and current limitations
+- **Shokunin Architect** — explains technical architecture, agents, evals, security routing, observability, limitations, and implementation paths
+
+These agents are source-grounded and reference repository files rather than inventing answers. They help new contributors, reviewers, hiring managers, and AI coding agents understand the project quickly.
+
+**Agent locations:**
+- [Product Manager Agent](./.claude/agents/shokunin-product-manager.md)
+- [Architect Agent](./.claude/agents/shokunin-architect.md)
+
+**Supporting documentation:**
+- [Product Overview](./docs/product-overview.md)
+- [Architecture Overview](./docs/architecture-overview.md)
+- [Agent Directory](./docs/agent-directory.md)
+
+---
+
+## Meta Agents
+
+Shokunin Review includes repository-aware meta agents that help maintain the project itself:
+
+- **Documentation Curator** — checks that README, ROADMAP, CHANGELOG, docs, skills, scripts, and agent files stay consistent as the project grows
+- **Release Manager** — prepares PR summaries, release notes, changelog entries, version recommendations, and release readiness checks
+- **Competitive Analyst** — compares Shokunin Review with adjacent tools and identifies positioning gaps, while avoiding unsupported competitor claims
+
+These agents help prevent documentation drift, unclear releases, and overconfident positioning as the repository evolves.
+
+**Agent locations:**
+- [Documentation Curator Agent](./.claude/agents/shokunin-docs-curator.md)
+- [Release Manager Agent](./.claude/agents/shokunin-release-manager.md)
+- [Competitive Analyst Agent](./.claude/agents/shokunin-competitive-analyst.md)
+
+---
+
 ## Repository Map
 
 ```text

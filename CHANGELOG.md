@@ -1,5 +1,204 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+## Meta Agents: Documentation Curator, Release Manager, and Competitive Analyst
+
+### What changed
+
+Added three repository-aware meta agents that help maintain Shokunin Review as the project grows.
+
+### Problem solved
+
+As Shokunin Review adds more validators, evals, security routes, docs, scripts, and agent definitions, it becomes easy for documentation, roadmap, release notes, and positioning to drift apart.
+
+### Why this matters
+
+The Documentation Curator helps keep project documentation consistent across README, ROADMAP, CHANGELOG, docs, skills, scripts, and agents.
+
+The Release Manager helps prepare clear PR summaries, changelog entries, release notes, version recommendations, and release readiness checks.
+
+The Competitive Analyst helps compare Shokunin Review with adjacent tools while avoiding unsupported market claims.
+
+### Safety and accuracy
+
+All three agents are source-grounded. They must clearly separate:
+
+- Implemented functionality
+- Documented design
+- WIP work
+- Roadmap ideas
+- Assumptions
+- Missing external evidence
+
+### New files and areas
+
+This update adds:
+
+```
+.claude/agents/shokunin-docs-curator.md
+.claude/agents/shokunin-release-manager.md
+.claude/agents/shokunin-competitive-analyst.md
+scripts/verify-meta-agents.sh
+```
+
+### Updated files
+
+This update updates:
+
+```
+docs/agent-directory.md - Added meta agents to directory
+README.md - Added Meta Agents section
+CHANGELOG.md - This entry
+```
+
+### Meta agent responsibilities
+
+**Documentation Curator:**
+- Checks README, ROADMAP, CHANGELOG consistency
+- Identifies outdated claims and missing documentation
+- Validates file references in docs and agents
+- Recommends targeted documentation updates
+- Prevents documentation drift
+
+**Release Manager:**
+- Prepares PR summaries and descriptions
+- Writes release notes and changelog entries
+- Recommends version bumps (patch/minor/major)
+- Produces release readiness reports
+- Ensures verification commands are documented
+
+**Competitive Analyst:**
+- Compares Shokunin Review to adjacent tools
+- Identifies differentiation and gaps
+- Labels claims with confidence levels
+- Avoids unsupported competitor claims
+- Recommends missing competitor research
+
+### Competitive analysis caution
+
+The Competitive Analyst includes explicit guardrails:
+
+```text
+Current competitor data is not available in the repository.
+Add sources before making strong claims.
+```
+
+This prevents overconfident positioning without external sources.
+
+### Verification
+
+Run `scripts/verify-meta-agents.sh` to verify the meta agents implementation.
+
+### Product impact
+
+This update improves Shokunin Review from a codebase with agents to a self-maintaining system that can:
+
+- Keep documentation consistent as features grow
+- Produce clear release communication
+- Position itself accurately vs adjacent tools
+- Avoid documentation drift and overconfident claims
+
+It creates the foundation for:
+- Easier contributor onboarding
+- Better release discipline
+- More accurate product positioning
+- Sustainable repository growth
+
+## Onboarding Agents: Product Manager and Architect
+
+### What changed
+
+Added two repository-aware onboarding agents for product and technical understanding.
+
+### Problem solved
+
+As Shokunin Review grows, new contributors and reviewers need a fast way to understand what the project does, which features exist, how the architecture works, and what is still WIP.
+
+### Why this matters
+
+The Product Manager Agent explains product value, features, roadmap, positioning, user scenarios, and current limitations.
+
+The Architect Agent explains implementation, architecture, evals, security routing, traces, verification scripts, limitations, and technical trade-offs.
+
+Together, they make the repository easier to review, onboard into, and extend.
+
+### Safety and accuracy
+
+Both agents must ground answers in repository files and clearly separate:
+- Implemented features
+- Documented designs
+- WIP work
+- Roadmap ideas
+- Missing documentation
+
+They must not:
+- Invent product capabilities
+- Invent competitor claims
+- Overstate maturity
+- Claim production readiness unless verified
+
+### New files and areas
+
+This update adds:
+
+```
+.claude/agents/shokunin-product-manager.md
+.claude/agents/shokunin-architect.md
+docs/product-overview.md
+docs/architecture-overview.md
+docs/agent-directory.md
+scripts/verify-onboarding-agents.sh
+```
+
+### Updated files
+
+This update updates:
+
+```
+README.md - Added Onboarding Agents section
+CHANGELOG.md - This entry
+```
+
+### Agent responsibilities
+
+**Product Manager Agent:**
+- Explain all current product features
+- Explain user flows and review scenarios
+- Explain why each feature exists
+- Explain roadmap and future plans
+- Explain product differentiation
+- Explain onboarding path for new users
+- Identify missing product docs
+- Suggest product improvements
+
+**Architect Agent:**
+- Explain system architecture
+- Explain CLI structure and command flow
+- Explain review engine and validator execution
+- Explain eval harness architecture
+- Explain security routing and safety judge flow
+- Explain generated reports and traces
+- Explain limitations and technical debt
+- Explain future architecture options
+- Identify missing technical docs
+
+### Verification
+
+Run `scripts/verify-onboarding-agents.sh` to verify the onboarding agents implementation.
+
+### Product impact
+
+This update improves Shokunin Review from a codebase to a self-documenting system that can onboard new contributors and AI coding agents more effectively.
+
+It creates the foundation for:
+- Faster contributor onboarding
+- Better AI-assisted development
+- Clearer product and technical boundaries
+- Easier stakeholder understanding
+- Better hiring and candidate evaluation
+
+=======
+>>>>>>> origin/main
 ## Defensive Security Routing
 
 ### What changed
