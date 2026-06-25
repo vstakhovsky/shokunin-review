@@ -32,6 +32,7 @@ See [Product Architecture Roadmap](./docs/product-architecture-roadmap.md) for c
 
 ---
 
+<<<<<<< HEAD
 ## Eval Operating System Roadmap
 
 Shokunin Review includes an Eval Operating System for continuous quality improvement.
@@ -72,6 +73,8 @@ See [Eval Operating System](./docs/eval-operating-system.md) for complete detail
 
 ---
 
+=======
+>>>>>>> origin/main
 ## MVP 1 — Review Readiness Foundation
 
 **Status**: ✅ In Development
